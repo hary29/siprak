@@ -52,7 +52,7 @@
                                         </div>
 
                                         <div class="form-group">
-                                        <label for="" class="col-sm-5">Apakah anda ingin menampilkan data ini?</label>
+                                        <label for="" class="col-sm-5">Apakah anda ingin mengaktifasi kurikulum ini?</label>
                                         <div class="col-sm-4">
                                         <label class="radio-inline"><input type="radio" name="flag" value="1" <?php if($list['flag']=='1'){echo 'checked';}?>>Ya</label>
                                         <label class="radio-inline"><input type="radio" name="flag" value="0" <?php if($list['flag']=='0'){echo 'checked';}?>>Tidak</label>

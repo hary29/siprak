@@ -58,7 +58,7 @@ $autoload['packages'] = array();
 |
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
-$autoload['libraries'] =  array('database', 'session', 'pagination', 'simple_login', 'form_validation', 'table');
+$autoload['libraries'] =  array('database', 'session', 'pagination', 'simple_login', 'form_validation', 'table', 'javascript');
 /*
 | -------------------------------------------------------------------
 |  Auto-load Drivers

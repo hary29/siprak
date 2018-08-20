@@ -75,4 +75,12 @@ class M_jadwal extends CI_Model {
   		$query = $this->db->get('');
         return $query->result_array();
 	}
+	public function cek_sesi($id_pelajaran)
+	{
+		$this->db->select('sesi');
+		$this->db->where('id_pelajaran',$id_pelajaran);
+		$query = $this->db->get('tb_pelajaran');
+		return $query->result();
+	}
+	
 }

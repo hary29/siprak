@@ -47,7 +47,7 @@
                               </div>
 
                               <div class="form-group">
-                                <label for="" class="col-sm-5">Apakah anda ingin menampilkan data ini?</label>
+                                <label for="" class="col-sm-5">Apakah anda ingin mengaktifasi kurikulum ini?</label>
                               <div class="col-sm-4">
                                 <label class="radio-inline"><input type="radio" name="flag" value="1">Ya</label>
                                 <label class="radio-inline"><input type="radio" name="flag" value="0">Tidak</label>
@@ -56,7 +56,7 @@
 
                               </br>
                               
-                              <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">Simpan</button>&nbsp &nbsp
+                              <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">Simpan</button>
                               <a href="<?php echo base_url(); ?>back/eksperimen" class="btn btn-inverse waves-effect waves-light">Kembali</a><br>
                               
                               </form>

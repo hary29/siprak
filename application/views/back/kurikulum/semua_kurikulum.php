@@ -41,27 +41,34 @@
 														<td><?php echo ++$no ?></a></td>
 														<td><?php echo $list['semester']; ?></td>
 														<td><?php echo $list['tahun']; ?></td>
-														<td><?php echo $list['flag']; ?></td>
+														<td><?php if ($list['flag']==1)
+														{
+															echo "aktif";
+														}
+														else{
+															echo "tidak aktif";
+														} ?></td>
 														<td>
 
 														<a href="<?php echo base_url() ?>back/kurikulum/edit/<?php echo $list['id_kurikulum'] ?>"> <label class="btn btn-info" >EDIT</a> &nbsp 
-                            <?php
-                        //$level=$this->session->userdata('level');
-                        // if($level == 1){?>
-                            <a href="<?php echo base_url() ?>back/kurikulum/delete/<?php echo $list['id_kurikulum'] ?>"onclick="return confirm ('Apakah Anda yakin akan menghapus data ini ?')"><label class="btn btn-danger" >DELETE</a><?php } ?></td></label></a></label></a></td></tr>
-                          </tr>
+							<?php
+						//$level=$this->session->userdata('level');
+						// if($level == 1){?>
+							<a href="<?php echo base_url() ?>back/kurikulum/delete/<?php echo $list['id_kurikulum'] ?>"onclick="return confirm ('Apakah Anda yakin akan menghapus data ini ?')"><label class="btn btn-danger" >DELETE</a><?php } ?></td></label></a></label></a></td></tr>
+						  </tr>
 
-                          <?php echo $this->session->flashdata('pesan'); ?>
-                                          
-                                        </tr>
-                                       
-                                      </tbody>
-                                    </table>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+						  <?php echo $this->session->flashdata('pesan'); ?>
+										  
+										</tr>
+									   
+									  </tbody>
+										</table>
+									</div>
+								</div>
+								<div align="center" class="panel-footer" style="height:40px;">
+                					<?php echo $halaman ?> <!--Memanggil variable pagination-->
+                 				</div>
+							</div>
+						</div>
+					</div>
+				</div>

@@ -71,10 +71,19 @@ class Eksperimen extends CI_Controller {
 	}
 
 	public function tambah_aksi(){
+
+		$this->form_validation->set_rules('nama_pelajaran','nama_pelajaran','required');
+		$this->form_validation->set_rules('id_kurikulum','id_kurikulum','required');
+		$this->form_validation->set_rules('sesi','sesi','required');
+		if($this->form_validation->run() == false){
+			$this->session->set_flashdata('sukses', "<div class=\"alert alert-danger\" id=\"alert\"><i class=\"\"><strong>error!</strong><br></i> Gagal merubah data</div>");
+			redirect('back/Eksperimen');
+		}
 		$data_eksperimen = array(
-			'id_pelajaran' => $this->input->post('id_pelajaran'),
+			'nama_pelajaran' => $this->input->post('nama_pelajaran'),
 			'id_kurikulum' => $this->input->post('id_kurikulum'),
-			'nama_pelajaran' => $this->input->post('nama_pelajaran')
+			'nama_pelajaran' => $this->input->post('nama_pelajaran'),
+			'sesi' => $this->input->post('sesi')
 			);
 
 			//print_r($data_bobot);exit;
@@ -110,6 +119,7 @@ class Eksperimen extends CI_Controller {
                                 if($level==1){
 		$this->form_validation->set_rules('id_kurikulum','id_kurikulum','required');
 		$this->form_validation->set_rules('nama_pelajaran','nama_pelajaran','required');
+		$this->form_validation->set_rules('sesi','sesi','required');
 		if($this->form_validation->run() == false){
 			$this->session->set_flashdata('sukses', "<div class=\"alert alert-danger\" id=\"alert\"><i class=\"\"><strong>error!</strong><br></i> Gagal merubah data kelompok</div>");
 	redirect('back/eksperimen');
@@ -117,7 +127,8 @@ class Eksperimen extends CI_Controller {
 	$data_eksperimen = array(
 			'id_pelajaran' => $this->input->post('id_pelajaran'),
 			'id_kurikulum' => $this->input->post('id_kurikulum'),
-			'nama_pelajaran' => $this->input->post('nama_pelajaran')
+			'nama_pelajaran' => $this->input->post('nama_pelajaran'),
+			'sesi' => $this->input->post('sesi')
 			);
 //print_r($data_user);exit;
 	$this->M_eksperimen->edit($data_eksperimen);
@@ -133,7 +144,8 @@ class Eksperimen extends CI_Controller {
 		$data_eksperimen = array(
 			'id_pelajaran' => $this->input->post('id_pelajaran'),
 			'id_kurikulum' => $this->input->post('id_kurikulum'),
-			'nama_pelajaran' => $this->input->post('nama_pelajaran')
+			'nama_pelajaran' => $this->input->post('nama_pelajaran'),
+			'sesi' => $this->input->post('sesi')
 			);
 //print_r($data_user);exit;
 	$this->M_eksperimen->edit($data_kelompok);

@@ -15,12 +15,9 @@
 							<div class="form-wrap">
 								<div class="tab">
 									<ul class="tab-menu">
-										
-										<li class="active gtco-first"><a href="#" data-tab="login">Login</a></li>
+										<li class="active">Login</li>
 									</ul>
 									<div class="tab-content">
-										
-
 										<div class="tab-content-inner active" data-content="login">
 											<form action="<?php echo base_url(); ?>front/log/login" class="login-page" method="POST">
 												<div class="row form-group">

@@ -44,4 +44,17 @@ class M_kurikulum extends CI_Model {
       	$query = $this->db->get('tb_kurikulum');
     	return $query->num_rows();
 	}
+	public function cek_kurikulum()
+	{
+		$this->db->select('*');
+		$this->db->where('flag','1');
+		$query = $this->db->get('tb_kurikulum');
+		
+		if ($query->num_rows() == null){
+			return true;
+		}
+	else{
+			return false;
+		}
+	}
 }

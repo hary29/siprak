@@ -47,9 +47,16 @@
                               </div>
                               </div>
 
+                              <div class="form-group">
+	                              <label for="gejala" class="col-sm-4">sesi</label>
+	                              <div class="col-sm-4">
+	                                  <input type="number" placeholder="1" step="1" min="1" max="" name="sesi" class="form-control" value="<?php echo set_value('sesi', '14');?>" />
+	                              </div>
+                              </div>
+
                               </br>
                               
-                              <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">Simpan</button>&nbsp &nbsp
+                              <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">Simpan</button>
                               <a href="<?php echo base_url(); ?>back/eksperimen" class="btn btn-inverse waves-effect waves-light">Kembali</a><br>
                               
                               </form>

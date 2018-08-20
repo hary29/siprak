@@ -59,6 +59,13 @@ class Kurikulum extends CI_Controller {
 	}
 
 	public function tambah() {
+		$test= $this->M_kurikulum->cek_kurikulum();
+			//print_r($test);exit;
+		if ($test == 0)
+		{
+			$this->session->set_flashdata('sukses', "<div class=\"alert alert-danger\" id=\"alert\"><i class=\"\"><strong>error!</strong><br></i>kurikulum sudah ada yang aktif, silahkan edit kurikulum terlebih dahulu</div>");
+			redirect('back/kurikulum/index');
+		}
 
 		$this->load->view('layout/back/header');
 		$this->load->view('layout/back/sidebar');
@@ -68,6 +75,14 @@ class Kurikulum extends CI_Controller {
 	}
 
 	public function tambah_aksi(){
+		$test= $this->M_kurikulum->cek_kurikulum();
+			//print_r($test);exit;
+		if ($test == 0)
+		{
+			$this->session->set_flashdata('sukses', "<div class=\"alert alert-danger\" id=\"alert\"><i class=\"\"><strong>error!</strong><br></i>kurikulum sudah ada yang aktif, silahkan edit kurikulum terlebih dahulu</div>");
+			redirect('back/kurikulum/index');
+		}
+
 		$data_kurikulum = array(
 			'id_kurikulum' => $this->input->post('id_kurikulum'),
 			'semester' => $this->input->post('semester'),
@@ -103,6 +118,14 @@ class Kurikulum extends CI_Controller {
     public function edit_aksi()
 	{
 		//print_r($_POST);exit;
+		$test= $this->M_kurikulum->cek_kurikulum();
+			//print_r($test);exit;
+		if ($test == 0)
+		{
+			$this->session->set_flashdata('sukses', "<div class=\"alert alert-danger\" id=\"alert\"><i class=\"\"><strong>error!</strong><br></i>kurikulum sudah ada yang aktif, silahkan edit kurikulum terlebih dahulu</div>");
+			redirect('back/kurikulum/index');
+		}
+		
 		$level= $this->session->userdata('level'); 
                                 if($level==1){
 		$this->form_validation->set_rules('semester','semester','required');

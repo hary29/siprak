@@ -30,6 +30,7 @@
 																					<th >Semester</th>
 																					<th >Tahun Ajaran</th>
 																					<th >Nama Eksperimen</th>
+																					<th >Jumlah Pertemuan</th>
 																					<th >Aksi</th>
 																				</tr>
 																			</thead>
@@ -43,6 +44,7 @@
 														<td><?php echo $list['semester']; ?></td>
 														<td><?php echo $list['tahun']; ?></td>
 														<td><?php echo $list['nama_pelajaran']; ?></td>
+														<td><?php echo $list['sesi']; ?></td>
 														<td>
 
 														<a href="<?php echo base_url() ?>back/eksperimen/edit/<?php echo $list['id_pelajaran'] ?>"> <label class="btn btn-info" >EDIT</a> &nbsp 
