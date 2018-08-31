@@ -78,6 +78,8 @@ class Mahasiswa extends CI_Controller {
 	public function tambah() {
 		//$data['data_user'] = $this->M_user->get_user();
 		$data['kelompok'] = $this->M_mahasiswa->get_kelompok();
+		$data['pelajaran'] = $this->M_mahasiswa->get_pelajaran();
+
 
 		$this->load->view('layout/back/header',$data);
 		$this->load->view('layout/back/sidebar',$data);
@@ -87,9 +89,11 @@ class Mahasiswa extends CI_Controller {
 	}
 
 	public function tambah_aksi(){
+		//print_r($_POST);exit;
 		$data_mahasiswa = array(
 			'nim' => $this->input->post('nim'),
 			'nama_mhs' => $this->input->post('nama_mhs'),
+			'id_pelajaran' => $this->input->post('id_pelajaran'),
 			'id_kelompok' => $this->input->post('id_kelompok')
 			);
 
@@ -110,6 +114,7 @@ class Mahasiswa extends CI_Controller {
 	public function edit($id) {	
          $data['data_mahasiswa'] = $this->M_mahasiswa->get_cari_mahasiswa($id);
          $data['kelompok'] = $this->M_mahasiswa->get_kelompok();
+         $data['pelajaran'] = $this->M_mahasiswa->get_pelajaran();
 
         $this->load->view('layout/back/header');
 		$this->load->view('layout/back/sidebar');
@@ -132,6 +137,7 @@ class Mahasiswa extends CI_Controller {
 	$data_mahasiswa = array(
 			'nim' => $this->input->post('nim'),
 			'nama_mhs' => $this->input->post('nama_mhs'),
+			'id_pelajaran' => $this->input->post('id_pelajaran'),
 			'id_kelompok' => $this->input->post('id_kelompok')
 			);
 //print_r($data_user);exit;
@@ -168,6 +174,13 @@ class Mahasiswa extends CI_Controller {
 		$this->M_anjing->delete($id);
 		$this->session->set_flashdata("pesan", "<div class=\"alert alert-success\" id=\"alert\"><i class=\"glyphicon glyphicon-ok\"></i> Data berhasil dihapus</div>");
 		redirect('back/anjing/anjing_user');
+		}
 	}
+	public function get_kelompok(){
+		$id=$this->input->post('id');
+	
+		$data=$this->M_mahasiswa->get_kelompok1($id);
+		//print_r($data);exit;
+		echo json_encode($data);
 	}
 }

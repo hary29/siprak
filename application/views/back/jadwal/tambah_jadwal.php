@@ -14,14 +14,18 @@
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
+
                   <?php 
-  if ($this->session->flashdata('sukses')) {
-    echo '<p class="warning" style="margin: 10px 20px;">'.$this->session->flashdata('sukses').'</p>';
-  }
-  echo validation_errors('<p class="warning" style="margin: 10px 20px;">','</p>');
-   ?>
+				  if ($this->session->flashdata('sukses')) {
+				    echo '<p class="warning" style="margin: 10px 20px;">'.$this->session->flashdata('sukses').'</p>';
+				  }
+
+				  echo validation_errors('<p class="warning" style="margin: 10px 20px;">','</p>');
+				 
+				 ?>
                 <?php $id=$this->session->userdata('id');?>
-                
+                <p class="warning" style="margin: 10px 20px;">
+                 <div class=\"alert alert-danger\" id=\"alert\"><i class=\"\"><strong>Perhatian!</strong><br></i><strong>Jadwal otomatis</strong> menambah sesuai dengan jumlah <strong>sesi</strong> dari experimen yang di Pilih.</div></p>
                 <div class="container">
                   <div class="row">
                     <div class="col-lg-12 col-md-12">
@@ -43,25 +47,23 @@
                               </div>
 
                               <div class="form-group">
-                              <label for="kelompok" class="col-sm-1">Kelompok</label>
+                              <label for="gejala" class="col-sm-4">Experimen</label>
                               <div class="col-sm-4">
-                                  <select name="id_kelompok" id="" class="form-control">
-                                  <option>--Pilih Kelompok--</option>
-                                  <?php foreach($kelompok as $ass) { ?>
-                                  <option value="<?php echo $ass['id_kelompok']?>"><?php echo $ass['nm_kelompok']?></option>
+                                  <select name="id_pelajaran" id="id_pelajaran" class="form-control">
+                                  <option value="0">--Pilih Experimen--</option>
+                                  <?php foreach($pelajaran as $kel) { ?>
+                                  <option value="<?php echo $kel->id_pelajaran?>"><?php echo $kel->nama_pelajaran?></option>
                                   <?php } ?>
                                   </select>
                               </div>
-                              </div>
+                          </div>
 
                               <div class="form-group">
-                              <label for="kelompok" class="col-sm-3">Judul Percobaan</label>
+                              <label for="gejala" class="col-sm-4">Kelompok</label>
                               <div class="col-sm-4">
-                                  <select name="id_pelajaran" id="" class="form-control">
-                                  <option>--Pilih Judul Percobaan--</option>
-                                  <?php foreach($pelajaran as $ass) { ?>
-                                  <option value="<?php echo $ass['id_pelajaran']?>"><?php echo $ass['nama_pelajaran']?></option>
-                                  <?php } ?>
+                                  <select name="id_kelompok" id="id_kelompok" class="id_kelompok form-control">
+                                  <option>--Pilih Kelompok--</option>
+                                  
                                   </select>
                               </div>
                               </div>
@@ -95,7 +97,31 @@
                             
                 
                </div>
-
+<script src="<?php echo base_url(); ?>asset/js/jquery-2.2.3.min.js"></script>
+ <script type="text/javascript" src="<?php echo base_url(); ?>asset/js/jquery.chained.min.js"></script>
+ <script type="text/javascript">
+	$(document).ready(function(){
+		$('#id_pelajaran').change(function(){
+			var id=$(this).val();
+			$.ajax({
+				url : "<?php echo base_url();?>back/Mahasiswa/get_kelompok",
+				method : "POST",
+				data : {id: id},
+				async : false,
+		        dataType : 'json',
+				success: function(data){
+					var html = '';
+		            var i;
+		            for(i=0; i<data.length; i++){
+		                html += '<option value = "'+data[i].id_kelompok+'">'+data[i].nm_kelompok+'</option>';
+		            }
+		            $('.id_kelompok').html(html);
+					
+				}
+			});
+		});
+	});
+</script>
 
                 <!-- /.right-sidebar -->
             

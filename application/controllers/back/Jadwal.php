@@ -8,6 +8,7 @@ class Jadwal extends CI_Controller {
 		$this->load->helper('form');
 		$this->load->helper('url');
 		$this->load->model('M_jadwal');
+		$this->load->model('M_eksperimen');
 	}
 
 	public function index($offset=0)
@@ -71,25 +72,64 @@ class Jadwal extends CI_Controller {
 	}
 
 	public function tambah_aksi(){
+		if (empty($this->input->post('tgl')))
+		{
+			$_POST['tgl']=date("Y-m-d");
+		}
+		if ($this->input->post('id_kelompok')== '--Pilih Kelompok--')
+		{
+			$_POST['id_kelompok']=0;
+		}
 		$data_jadwal = array(
 			'id_jadwal' => $this->input->post('id_jadwal'),
 			'tgl' => $this->input->post('tgl'),
-			'jam' => $this->input->post('jam'),
+			'jam_mulai' => $this->input->post('jam'),
 			'id_kelompok' => $this->input->post('id_kelompok'),
 			'id_pelajaran' => $this->input->post('id_pelajaran'),
 			'id_user' => $this->input->post('id_user')
 			);
 
-			//print_r($data_bobot);exit;
+			//print_r($data_jadwal);//exit;
 			//cek kesamaan data jika sama maka tidak di simpan
 			$cek=$this->M_jadwal->get_cari_sama($data_jadwal);
+			$data_eksperimen = $this->input->post('id_pelajaran');
+			//print_r($data_eksperimen);
+			//cek sesi dari id_pelajaran
+			$cari_sesi=$this->M_eksperimen->get_cari_sesi($data_eksperimen);
+			//print_r($cari_sesi->sesi);exit;
+			
+			//jika sesi == 0
+			if($cari_sesi->sesi <= 0){
+				$this->session->set_flashdata('sukses', "<div class=\"alert alert-danger\" id=\"alert\"><i class=\"\"><strong>error!</strong><br></i> Sesi kosong</div>");
+			redirect('back/jadwal/tambah');
+			}
 			//print_r($cek);exit;
 			if ($cek==0) {
-		$this->M_jadwal->tambah($data_jadwal);
-		$this->session->set_flashdata("pesan", "<div class=\"alert alert-success\" id=\"alert\"><i class=\"glyphicon glyphicon-ok\"></i> Berhasil menambah data</div>");
-		redirect('back/jadwal');}
+				$a=0;
+				for ($i=1; $i <= $cari_sesi->sesi ; $i++) { 
+					$tgl = $this->input->post('tgl');
+					$jam = $this->input->post('jam');
+					$date = date('Y-m-d', strtotime($tgl.'+'.$a.'days'));
+					$time = date('h:i:s', strtotime($jam.'+ 2 hours'));
+					//$time = date('h:i:s', $time);
+					print_r('tess'.$a.'tanggal'.$date. 'jam'.$time);$a+=7;echo"<br>";
+					$data_jadwal = array(
+							'id_jadwal' => $this->input->post('id_jadwal'),
+							'tgl' => $date,
+							'jam_mulai' => $this->input->post('jam'),
+							'jam_selesai' => $time,
+							'id_kelompok' => $this->input->post('id_kelompok'),
+							'id_pelajaran' => $this->input->post('id_pelajaran'),
+							'id_user' => $this->input->post('id_user')
+							);
+					$this->M_jadwal->tambah($data_jadwal);
+				}//exit;
+				
+				$this->session->set_flashdata("pesan", "<div class=\"alert alert-success\" id=\"alert\"><i class=\"glyphicon glyphicon-ok\"></i> Berhasil menambah data</div>");
+				redirect('back/jadwal');
+			}
 		else {
-			$this->session->set_flashdata('sukses', "<div class=\"alert alert-danger\" id=\"alert\"><i class=\"\"><strong>error!</strong><br></i> Data sudah ada</div>");
+			$this->session->set_flashdata('sukses', "<div class=\"alert alert-danger\" id=\"alert\"><i class=\"\"><strong>error!</strong><br></i> Jadwal sudah ada</div>");
 			redirect('back/jadwal/tambah');
 		}
 	}
@@ -114,7 +154,8 @@ class Jadwal extends CI_Controller {
 		$level= $this->session->userdata('level'); 
                                 if($level==1){
 		$this->form_validation->set_rules('tgl','tgl','required');
-		$this->form_validation->set_rules('jam','jam','required');
+		$this->form_validation->set_rules('jam_mulai','jam_mulai','required');
+		$this->form_validation->set_rules('jam_selesai','jam_selesai','required');
 		$this->form_validation->set_rules('id_kelompok','id_kelompok','required');
 		$this->form_validation->set_rules('id_pelajaran','id_pelajaran','required');
 		$this->form_validation->set_rules('id_user','id_user','required');
@@ -125,7 +166,8 @@ class Jadwal extends CI_Controller {
 	$data_jadwal = array(
 			'id_jadwal' => $this->input->post('id_jadwal'),
 			'tgl' => $this->input->post('tgl'),
-			'jam' => $this->input->post('jam'),
+			'jam_mulai' => $this->input->post('jam_mulai'),
+			'jam_selesai' => $this->input->post('jam_selesai'),
 			'id_kelompok' => $this->input->post('id_kelompok'),
 			'id_pelajaran' => $this->input->post('id_pelajaran'),
 			'id_user' => $this->input->post('id_user')

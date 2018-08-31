@@ -81,7 +81,7 @@
                                         <tr>
                                         <td><?php echo $list['nm_kelompok']; ?></td>
                                         <td><?php echo $format; ?></td>
-                                        <td><?php echo $list['jam']; ?></td>
+                                        <td><?php echo $list['jam_mulai']; ?></td>
                                         <td><?php echo $list['nama_pelajaran']; ?></td>
                                         <td><?php echo $list['nama']; ?></td>
                                         </tr>
@@ -89,6 +89,9 @@
                                     <?php } ?>
                                 </table>
                             </div>
+                            <div align="center" class="panel-footer" style="height:40px;">
+                			<?php echo $halaman ?> <!--Memanggil variable pagination-->
+                 		</div>
                         </div>
                     </div>
                      <div class="col-sm-12">

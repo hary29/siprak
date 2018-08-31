@@ -36,14 +36,14 @@
                                         <div class="form-group">
                                         <label for="" class="col-sm-1">Pertemuan</label>
                                         <div class="col-sm-4">
-                                        <input type="text" name="pertemuan" class="form-control" value="<?php echo $list['pertemuan']; ?>" />
+                                        <input type="text" name="pertemuan" class="form-control" value="<?php echo $list['pertemuan']; ?>" disabled="disabled"/>
                                         </div>
                                         </div>
 
                                         <div class="form-group">
-                                          <label for="" class="col-sm-1">Judul Eksperimen</label>
+                                          <label for="" class="col-sm-6">Judul Eksperimen</label>
                                           <div class="col-sm-4">
-                                           <select name="id_pelajaran" id="" class="form-control">
+                                           <select name="id_pelajaran" id="" class="form-control" disabled="disabled">
                                               <?php foreach($pel as $ass) { ?>
                                               <option value="<?php echo $ass['id_pelajaran']?>"<?php if($list['id_pelajaran'] == ($ass['id_pelajaran'])){ echo 'selected'; } ?>><?php echo $ass['nama_pelajaran']?></option>
                                               <?php } ?>
@@ -77,7 +77,7 @@
                                           </div>
 
                                         <div class="form-group">
-                                        <label for="" class="col-sm-1">Nama Asisten</label>
+                                        <label for="" class="col-sm-4">Nama Asisten</label>
                                         <div class="col-sm-4">
                                          <select name="id_user" id="" class="form-control">
                                             <?php foreach($user as $ass) { ?>

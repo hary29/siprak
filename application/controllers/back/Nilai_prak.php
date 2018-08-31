@@ -10,6 +10,9 @@ class Nilai_prak extends CI_Controller {
 		$this->load->model('M_user');
 		$this->load->model('M_kelompok');
 		$this->load->model('M_nilai_prak');
+		$this->load->model('M_eksperimen');
+		$this->load->model('M_responsi');
+		$this->load->model('M_hasil_akhir');
 	}
 
 	public function index($offset=0)
@@ -65,14 +68,29 @@ class Nilai_prak extends CI_Controller {
 		$data['mhs'] = $this->M_nilai_prak->get_mahasiswa();
 		$data['pel'] = $this->M_nilai_prak->get_pelajaran();
 
+
 		$this->load->view('layout/back/header',$data);
 		$this->load->view('layout/back/sidebar',$data);
-		$this->load->view('back/nilai_prak/tambah_nilai_prak',$data);
+		$this->load->view('back/nilai_prak/pilih_experimen',$data);
 		$this->load->view('layout/back/footer',$data);
 	
 	}
 
+	public function pilih_experimen(){
+
+		$id = $this->input->post('id_pelajaran');
+		$data['prak']=$this->M_eksperimen->cari_eksperimen($id);
+		$data['user'] = $this->M_nilai_prak->get_user();
+		$data['pelajaran'] = $id;
+		//print_r($data['prak']);exit;
+		$this->load->view('layout/back/header',$data);
+		$this->load->view('layout/back/sidebar',$data);
+		$this->load->view('back/nilai_prak/tambah_nilai_prak',$data);
+		$this->load->view('layout/back/footer',$data);
+
+	}
 	public function tambah_aksi(){
+		//print_r($_POST);exit;
 		$data_nilai_prak = array(
 			'id_nilai_prak' => $this->input->post('id_nilai_prak'),
 			'pertemuan' => $this->input->post('pertemuan'),
@@ -85,13 +103,167 @@ class Nilai_prak extends CI_Controller {
 
 			//print_r($data_bobot);exit;
 			//cek kesamaan data jika sama maka tidak di simpan
+			$data_eksperimen = $this->input->post('id_pelajaran');
+			$data_mhs = $this->input->post('nim');
+			//print_r($data_eksperimen);
+			//cek sesi dari id_pelajaran
+			$get=$this->M_nilai_prak->get_sesi($data_eksperimen,$data_mhs);
+			
+			$cari_sesi=$this->M_eksperimen->get_cari_sesi($data_eksperimen);
+			//$this->M_nilai_prak->tambah($data_nilai_prak);
+			//print_r($data_eksperimen);
+			//print_r($get);
+			//print_r($cari_sesi->sesi);
+			//exit;
+			
+			//jika sesi == 0
+			if($get >= $cari_sesi->sesi){
+				$this->session->set_flashdata('sukses', "<div class=\"alert alert-danger\" id=\"alert\"><i class=\"\"><strong>error!</strong><br></i> data pertemuan sudah terisi penuh</div>");
+			redirect('back/nilai_prak');
+			}
 			$cek=$this->M_nilai_prak->get_cari_sama($data_nilai_prak);
 			//print_r($cek);exit;
 			if ($cek==0) {
-		$this->M_nilai_prak->tambah($data_nilai_prak);
-		$this->session->set_flashdata("pesan", "<div class=\"alert alert-success\" id=\"alert\"><i class=\"glyphicon glyphicon-ok\"></i> Berhasil menambah data</div>");
-		redirect('back/nilai_prak');}
-		else {
+				$this->M_nilai_prak->tambah($data_nilai_prak);
+			//input nilai akhir
+				$cek1 =$this->M_nilai_prak->get_nilai_akhir($data_eksperimen,$data_mhs);
+				foreach ($cek1 as $key) {
+					$pretest = $key->pretest;
+					$laporan = $key->laporan;
+				}
+				//cari nilai akhir
+				$nilai_akhir = ($pretest+$laporan)/$get;
+				
+				$data_nilai_prak = array(
+				'id_pelajaran' => $this->input->post('id_pelajaran'),
+				'nim' => $this->input->post('nim'),
+				'nilai' => $nilai_akhir
+				);
+				$cek_nilai =$this->M_nilai_prak->cek_nilai_akhir($data_eksperimen,$data_mhs);
+				
+					//jika cek nilai kosong maka buat baru
+					if (empty($cek_nilai)){
+						$id_p = $this->M_nilai_prak->tambah_akhir($data_nilai_prak);
+						//print_r($input);exit;
+						//tambah ke hasil akhir
+						
+						//get responsi
+						$cek_responsi = $this->M_responsi->cek_nilai_responsi($data_eksperimen,$data_mhs);
+						//print_r($cek_responsi);exit;
+						if($cek_responsi == null){
+							$responsi = 0;
+							$id_responsi = '';
+						}else{
+							foreach ($cek_responsi as $key) {
+								//cek responsi jika kosong maka ubah ke 0
+								$responsi = isset($key->nilai_responsi)? $key->nilai_responsi : '0';
+								$id_responsi = isset($key->id_responsi)? $key->id_responsi : '';
+							}
+						}
+
+						 $nilai_final = ($nilai_akhir+$responsi)/2;
+						 //print_r($responsi);exit;
+						//print_r($cek_hasil_akhir);exit;
+							//jika cek nilai kosong maka buat baru
+							$cek_hasil_akhir =$this->M_hasil_akhir->cek_hasil_akhir($data_eksperimen,$data_mhs);
+							if (empty($cek_hasil_akhir)){
+
+								//get responsi
+								//get nilai akhir
+								//(responsi+nilai akhir)/2
+								//insert nilai akhir
+								//$id_prak = $this->M_nilai_prak->tambah_akhir($data_nilai_prak);
+								$data_nilai_akhir = array(
+									'id_pelajaran' => $this->input->post('id_pelajaran'),
+									'nim' => $this->input->post('nim'),
+									'id_responsi' => $id_responsi,
+									'id_prak_akhir' => $id_p,
+									'nilai' => $nilai_final
+								);
+								$this->M_hasil_akhir->tambah($data_nilai_akhir);
+
+
+							}else{
+								//jika ada update yang sudah ada
+								foreach ($cek_hasil_akhir as $key) {
+									$id_akhir = $key->id_hasil_akhir;
+								}
+								//print_r($id_akhir);exit;
+								$data_nilai_prak = array(
+									'id_hasil_akhir' => $id_akhir,
+									'id_responsi' => $id_responsi,
+									'nilai' => $nilai_final
+								);
+								$this->M_hasil_akhir->edit($data_nilai_prak);
+							}
+					}else{
+						//jika ada update yang sudah ada
+						foreach ($cek_nilai as $key) {
+							$id = $key->id_prak_akhir;
+						}
+						$data_nilai_prak = array(
+						'id_pelajaran' => $this->input->post('id_pelajaran'),
+						'nim' => $this->input->post('nim'),
+						'nilai' => $nilai_akhir,
+						'id_prak_akhir' => $id
+						);
+						$this->M_nilai_prak->edit_akhir($data_nilai_prak);
+												
+						//get responsi
+						$cek_responsi = $this->M_responsi->cek_nilai_responsi($data_eksperimen,$data_mhs);
+						//print_r($cek_responsi);exit;
+						if($cek_responsi == null){
+							$responsi = 0;
+							$id_responsi = '';
+						}else{
+							foreach ($cek_responsi as $key) {
+								//cek responsi jika kosong maka ubah ke 0
+								$responsi = isset($key->nilai_responsi)? $key->nilai_responsi : '0';
+								$id_responsi = isset($key->id_responsi)? $key->id_responsi : '';
+							}
+						}
+
+						 $nilai_final = ($nilai_akhir+$responsi)/2;
+						 //print_r($responsi);exit;
+						//print_r($cek_hasil_akhir);exit;
+							//jika cek nilai kosong maka buat baru
+							$cek_hasil_akhir =$this->M_hasil_akhir->cek_hasil_akhir($data_eksperimen,$data_mhs);
+							if (empty($cek_hasil_akhir)){
+
+								//get responsi
+								//get nilai akhir
+								//(responsi+nilai akhir)/2
+								//insert nilai akhir
+								//$id_prak = $this->M_nilai_prak->tambah_akhir($data_nilai_prak);
+								$data_nilai_akhir = array(
+									'id_pelajaran' => $this->input->post('id_pelajaran'),
+									'nim' => $this->input->post('nim'),
+									'id_responsi' => $id_responsi,
+									'id_prak_akhir' => $id_p,
+									'nilai' => $nilai_final
+								);
+								$this->M_hasil_akhir->tambah($data_nilai_akhir);
+
+
+							}else{
+								//jika ada update yang sudah ada
+								foreach ($cek_hasil_akhir as $key) {
+									$id_akhir = $key->id_hasil_akhir;
+								}
+								//print_r($id_akhir);exit;
+								$data_nilai_prak = array(
+									'id_hasil_akhir' => $id_akhir,
+									'id_responsi' => $id_responsi,
+									'nilai' => $nilai_final
+								);
+								$this->M_hasil_akhir->edit($data_nilai_prak);
+							}
+					}
+
+				$this->session->set_flashdata("pesan", "<div class=\"alert alert-success\" id=\"alert\"><i class=\"glyphicon glyphicon-ok\"></i> Berhasil menambah data</div>");
+				redirect('back/nilai_prak');
+			}
+		else{
 			$this->session->set_flashdata('sukses', "<div class=\"alert alert-danger\" id=\"alert\"><i class=\"\"><strong>error!</strong><br></i> Data sudah ada</div>");
 			redirect('back/nilai_prak/tambah');
 		}
@@ -115,55 +287,184 @@ class Nilai_prak extends CI_Controller {
 	{
 		//print_r($_POST);exit;
 		$level= $this->session->userdata('level'); 
-                                if($level==1){
-        $this->form_validation->set_rules('id_nilai_prak','id_nilai_prak','required');
-		$this->form_validation->set_rules('pertemuan','pertemuan','required');
-		$this->form_validation->set_rules('id_pelajaran','id_pelajaran','required');
-		$this->form_validation->set_rules('pretest','pretest','required');
-		$this->form_validation->set_rules('laporan','laporan','required');
-		$this->form_validation->set_rules('nim','nim','required');
-		$this->form_validation->set_rules('id_user','id_user','required');
-		if($this->form_validation->run() == false){
-			$this->session->set_flashdata('sukses', "<div class=\"alert alert-danger\" id=\"alert\"><i class=\"\"><strong>error!</strong><br></i> Gagal merubah data</div>");
-	redirect('back/nilai_prak');
-		}else{
-	$data_nilai_prak = array(
-			'id_nilai_prak' => $this->input->post('id_nilai_prak'),
-			'pertemuan' => $this->input->post('pertemuan'),
-			'id_pelajaran' => $this->input->post('id_pelajaran'),
-			'pretest' => $this->input->post('pretest'),
-			'laporan' => $this->input->post('laporan'),
-			'nim' => $this->input->post('nim'),
-			'id_user' => $this->input->post('id_user')
-			);
-//print_r($data_user);exit;
-	$this->M_nilai_prak->edit($data_nilai_prak);
-	$this->session->set_flashdata('sukses', "<div class=\"alert alert-success\" id=\"alert\"><i class=\"\"></i> Data berhasil diubah</div>");
-	redirect('back/nilai_prak');}}
-	else {
+        if($level==1)
+        {
+	        $this->form_validation->set_rules('id_nilai_prak','id_nilai_prak','required');
+			$this->form_validation->set_rules('pertemuan','pertemuan','required');
+			$this->form_validation->set_rules('id_pelajaran','id_pelajaran','required');
+			$this->form_validation->set_rules('pretest','pretest','required');
+			$this->form_validation->set_rules('laporan','laporan','required');
+			$this->form_validation->set_rules('nim','nim','required');
+			$this->form_validation->set_rules('id_user','id_user','required');
+			if($this->form_validation->run() == false)
+			{
+				$this->session->set_flashdata('sukses', "<div class=\"alert alert-danger\" id=\"alert\"><i class=\"\"><strong>error!</strong><br></i> Gagal merubah data</div>");
+				redirect('back/nilai_prak');
+			}
+		else{
+				$data_nilai_prak = array(
+					'id_nilai_prak' => $this->input->post('id_nilai_prak'),
+					'pertemuan' => $this->input->post('pertemuan'),
+					'id_pelajaran' => $this->input->post('id_pelajaran'),
+					'pretest' => $this->input->post('pretest'),
+					'laporan' => $this->input->post('laporan'),
+					'nim' => $this->input->post('nim'),
+					'id_user' => $this->input->post('id_user')
+					);
+		//print_r($data_user);exit;
+				$this->M_nilai_prak->edit($data_nilai_prak);
+				$data_eksperimen = $this->input->post('id_pelajaran');
+				$data_mhs = $this->input->post('nim');
+				$cek_nilai =$this->M_nilai_prak->cek_nilai_akhir($data_eksperimen,$data_mhs);
+
+			//jika cek nilai kosong maka buat baru
+				if (empty($cek_nilai)){
+					$id_p = $this->M_nilai_prak->tambah_akhir($data_nilai_prak);
+					//print_r($input);exit;
+					//tambah ke hasil akhir
+					$cek_hasil_akhir =$this->M_hasil_akhir->cek_hasil_akhir($data_eksperimen,$data_mhs);
+					//get responsi
+					$cek_responsi = $this->M_responsi->cek_nilai_responsi($data_eksperimen,$data_mhs);
+					//print_r($cek_responsi);exit;
+					if($cek_responsi == null){
+						$responsi = 0;
+						$id_responsi = '';
+					}else{
+						foreach ($cek_responsi as $key) {
+							//cek responsi jika kosong maka ubah ke 0
+							$responsi = isset($key->nilai_responsi)? $key->nilai_responsi : '0';
+							$id_responsi = isset($key->id_responsi)? $key->id_responsi : '';
+						}
+					}
+
+					$nilai_final = ($nilai_akhir+$responsi)/2;
+					 //print_r($responsi);exit;
+					//print_r($cek_hasil_akhir);exit;
+						//jika cek nilai kosong maka buat baru
+					if (empty($cek_hasil_akhir)){
+
+						//get responsi
+						//get nilai akhir
+						//$this->db->insert_id();//get last id
+						//(responsi+nilai akhir)/2
+						//insert nilai akhir
+						//$id_prak = $this->M_nilai_prak->tambah_akhir($data_nilai_prak);
+						$data_nilai_akhir = array(
+							'id_pelajaran' => $this->input->post('id_pelajaran'),
+							'nim' => $this->input->post('nim'),
+							'id_responsi' => $id_responsi,
+							'id_prak_akhir' => $id_p,
+							'nilai' => $nilai_final
+						);
+						$this->M_hasil_akhir->tambah($data_nilai_akhir);
+
+
+					}else{
+						//jika ada update yang sudah ada
+						foreach ($cek_hasil_akhir as $key) {
+							$id_akhir = $key->id_hasil_akhir;
+						}
+						//print_r($id_akhir);exit;
+						$data_nilai_prak = array(
+							'id_hasil_akhir' => $id_akhir,
+							'id_responsi' => $id_responsi,
+							'nilai' => $nilai_final
+						);
+						$this->M_hasil_akhir->edit($data_nilai_prak);
+					}
+				}
+			else{
+					//jika ada update yang sudah ada
+					foreach ($cek_nilai as $key) {
+						$id = $key->id_prak_akhir;
+					}
+					$data_nilai_prak = array(
+					'id_pelajaran' => $this->input->post('id_pelajaran'),
+					'nim' => $this->input->post('nim'),
+					'nilai' => $nilai_akhir,
+					'id_prak_akhir' => $id
+					);
+					$this->M_nilai_prak->edit_akhir($data_nilai_prak);
+											$cek_hasil_akhir =$this->M_hasil_akhir->cek_hasil_akhir($data_eksperimen,$data_mhs);
+					//get responsi
+					$cek_responsi = $this->M_responsi->cek_nilai_responsi($data_eksperimen,$data_mhs);
+					//print_r($cek_responsi);exit;
+					if($cek_responsi == null){
+						$responsi = 0;
+						$id_responsi = '';
+					}else{
+						foreach ($cek_responsi as $key) {
+							//cek responsi jika kosong maka ubah ke 0
+							$responsi = isset($key->nilai_responsi)? $key->nilai_responsi : '0';
+							$id_responsi = isset($key->id_responsi)? $key->id_responsi : '';
+						}
+					}
+
+					 $nilai_final = ($nilai_akhir+$responsi)/2;
+					 //print_r($responsi);exit;
+					//print_r($cek_hasil_akhir);exit;
+						//jika cek nilai kosong maka buat baru
+					if (empty($cek_hasil_akhir))
+					{
+
+						//get responsi
+						//get nilai akhir
+						//$this->db->insert_id();//get last id
+						//(responsi+nilai akhir)/2
+						//insert nilai akhir
+						//$id_prak = $this->M_nilai_prak->tambah_akhir($data_nilai_prak);
+						$data_nilai_akhir = array(
+							'id_pelajaran' => $this->input->post('id_pelajaran'),
+							'nim' => $this->input->post('nim'),
+							'id_responsi' => $id_responsi,
+							'id_prak_akhir' => $id_p,
+							'nilai' => $nilai_final
+						);
+						$this->M_hasil_akhir->tambah($data_nilai_akhir);
+					}
+				else{
+						//jika ada update yang sudah ada
+						foreach ($cek_hasil_akhir as $key) {
+							$id_akhir = $key->id_hasil_akhir;
+						}
+						//print_r($id_akhir);exit;
+						$data_nilai_prak = array(
+							'id_hasil_akhir' => $id_akhir,
+							'id_responsi' => $id_responsi,
+							'nilai' => $nilai_final
+						);
+						$this->M_hasil_akhir->edit($data_nilai_prak);
+					}
+				}
+				$this->session->set_flashdata('sukses', "<div class=\"alert alert-success\" id=\"alert\"><i class=\"\"></i> Data berhasil diubah</div>");
+				redirect('back/nilai_prak');
+			}
+		}
+	else{
 		$this->form_validation->set_rules('id_nilai_prak','id_nilai_prak','required');
 		$this->form_validation->set_rules('pertemuan','pertemuan','required');
 		$this->form_validation->set_rules('nim','nim','required');
 		$this->form_validation->set_rules('id_user','id_user','required');
 		if($this->form_validation->run() == false){
 			$this->session->set_flashdata('sukses', "<div class=\"alert alert-danger\" id=\"alert\"><i class=\"\"><strong>error!</strong><br></i> Gagal merubah data</div>");
-	redirect('back/nilai_prak/edit');
+			redirect('back/nilai_prak/edit');
 		}else{
 			$id= $this->session->userdata('id'); 
-		$data_nilai_prak = array(
-			'id_nilai_prak' => $this->input->post('id_nilai_prak'),
-			'pertemuan' => $this->input->post('pertemuan'),
-			'id_pelajaran' => $this->input->post('id_pelajaran'),
-			'pretest' => $this->input->post('pretest'),
-			'laporan' => $this->input->post('laporan'),
-			'nim' => $this->input->post('nim'),
-			'id_user' => $this->input->post('id_user')
-			);
+			$data_nilai_prak = array(
+				'id_nilai_prak' => $this->input->post('id_nilai_prak'),
+				'pertemuan' => $this->input->post('pertemuan'),
+				'id_pelajaran' => $this->input->post('id_pelajaran'),
+				'pretest' => $this->input->post('pretest'),
+				'laporan' => $this->input->post('laporan'),
+				'nim' => $this->input->post('nim'),
+				'id_user' => $this->input->post('id_user')
+				);
 //print_r($data_user);exit;
-	$this->M_nilai_prak->edit($data_nilai_prak);
-	$this->session->set_flashdata('sukses', "<div class=\"alert alert-success\" id=\"alert\"><i class=\"\"></i> Data berhasil diubah </div>");
-	redirect('back/nilai_prak');}
-	}
+			$this->M_nilai_prak->edit($data_nilai_prak);
+			$this->session->set_flashdata('sukses', "<div class=\"alert alert-success\" id=\"alert\"><i class=\"\"></i> Data berhasil diubah </div>");
+			redirect('back/nilai_prak');
+			}
+		}
 	}
 
 	public function delete($id) {
@@ -171,5 +472,16 @@ class Nilai_prak extends CI_Controller {
 		$this->M_nilai_prak->delete($id);
 		$this->session->set_flashdata("pesan", "<div class=\"alert alert-success\" id=\"alert\"><i class=\"glyphicon glyphicon-ok\"></i> Data berhasil dihapus</div>");
 		redirect('back/nilai_prak');
+	}
+	public function get_nilai(){
+		
+		$nim=$this->input->post('nim');
+		$idp=$this->input->post('idp');
+	
+		$data['nilai']=$this->M_nilai_prak->get_nilai($nim,$idp);
+		$tampil = $this->load->view('back/nilai_prak/nilai_mhs',$data);
+		//print_r($data);exit;
+		return $tampil;
+		//echo json_encode($data);
 	}
 }

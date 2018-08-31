@@ -63,4 +63,22 @@ class M_eksperimen extends CI_Model {
       	$query = $this->db->get('tb_pelajaran');
     	return $query->num_rows();
 	}
+	public function get_cari_sesi($data_eksperimen) 
+	{
+   		$this->db->select('*');
+      	$this->db->where('id_pelajaran', $data_eksperimen);
+      	$query = $this->db->get('tb_pelajaran');
+    	return $query->row();
+	}
+	public function cari_eksperimen($id)
+	{
+		$this->db->select('*');
+		$this->db->from('tb_pelajaran','tb_mahasiswa','tb_kelompok');
+  		$this->db->join('tb_mahasiswa','tb_pelajaran.id_pelajaran = tb_mahasiswa.id_pelajaran','left');
+  		$this->db->join('tb_kelompok','tb_mahasiswa.id_kelompok = tb_kelompok.id_kelompok','left');
+      	$this->db->where('tb_pelajaran.id_pelajaran', $id);
+      	$query = $this->db->get('');
+    	return $query->result_array();
+	}
+	
 }

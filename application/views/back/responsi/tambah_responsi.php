@@ -33,11 +33,15 @@
                               <div class="col-sm-4">
                                   <select name="nim" id="" class="form-control">
                                   <option>--Pilih Mahasiswa--</option>
-                                  <?php foreach($mhs as $m) { ?>
+                                  <?php foreach($responsi as $m) { ?>
                                   <option value="<?php echo $m['nim']?>"><?php echo $m['nim']?> - <?php echo $m['nama_mhs']?></option>
                                   <?php } ?>
                                   </select>
                               </div>
+                              </div>
+
+                               <div class="col-sm-4">
+                                  <input id="id_pelajaran" type= "hidden" name="id_pelajaran" class="form-control" value="<?php echo $pelajaran; ?>"/>
                               </div>
 
                               <div class="form-group">
@@ -52,24 +56,24 @@
                               <div class="col-sm-4">
                                   <select name="id_kurikulum" id="" class="form-control">
                                   <option>--Pilih Semester dan Tahun Ajaran--</option>
-                                  <?php foreach($kur as $m) { ?>
+                                  <?php foreach($kurikulum as $m) { ?>
                                   <option value="<?php echo $m['id_kurikulum']?>"><?php echo $m['semester']?> - <?php echo $m['tahun']?></option>
                                   <?php } ?>
                                   </select>
                               </div>
                               </div>
 
-                               <div class="form-group">
-                              <label for="gejala" class="col-sm-4">Permis 2</label>
-                              <div class="col-sm-4">
-                                  <select name="id_atr_prem2" id="" class="form-control">
-                                  <option>--Pilih Permis 2--</option>
-                                  <?php foreach($prem2 as $m) { ?>
-                                  <option value="<?php echo $m['id_atr_perm2']?>"><?php echo $m['nama_permis']?></option>
-                                  <?php } ?>
-                                  </select>
-                              </div>
-                              </div>
+                             <!--   <div class="form-group">
+                                                           <label for="gejala" class="col-sm-4">Permis 2</label>
+                                                           <div class="col-sm-4">
+                                <select name="id_atr_prem2" id="" class="form-control">
+                                <option>--Pilih Permis 2--</option>
+                                <?php //foreach($prem2 as $m) { ?>
+                                <option value="<?php // echo $m['id_atr_perm2']?>"><?php //echo $m['nama_permis']?></option>
+                                <?php //} ?>
+                                </select>
+                                                           </div>
+                                                           </div> -->
 
                               <div class="form-group">
                               <label for="gejala" class="col-sm-4">Dosen</label>

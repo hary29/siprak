@@ -2,11 +2,12 @@
 						<div class="container-fluid">
 								<div class="row bg-title">
 										<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-												<h4 class="page-title">Jadwal Praktikum</h4> </div>
+												<h4 class="page-title">Data Nilai Praktikum</h4> </div>
 										<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12"> <a href="" class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Refresh</a>
 												<ol class="breadcrumb">
 														<li><a href="<?php echo base_url() ?>front/Log/logout">Hospital</a></li>
-														<li class="active">Jadwal Praktikum</li>
+														<li><a href="<?php echo base_url() ?>back/nilai_prak/semua_nilai_prak">Nilai Praktikum</a></li>
+														<li class="active">Data Nilai Praktikum</li>
 												</ol>
 										</div>
 										<!-- /.col-lg-12 -->
@@ -25,11 +26,13 @@
 																<table id="myTable" class="table table-striped">
 																			<thead>
 																				<tr>
-																					<th >Tanggal</th>
-																					<th >Jam Mulai</th>
-																					<th >Jam Selesai</th>
-																					<th >Kelompok</th>
-																					<th >Judul Percobaan</th>
+																					<th >no</th>
+																					<th >NIM</th>
+																					<th >Nama Mahsiswa</th>
+																					<th >pertemuan</th>
+																					<th >Nilai Pretest</th>
+																					<th >Nilai Laporan</th>
+																					<th >Nama</th>
 																					<th >Asisten</th>
 																					<th >Aksi</th>
 																				</tr>
@@ -37,23 +40,27 @@
 																			<tbody>
 																				<tr class="odd gradeX">
 																					<?php 
-														
-													foreach($jadwal as $list) { 
-														$format = date('d-m-Y', strtotime($list['tgl'] ));?>
+														//$no = $offset;
+													foreach($prak as $list) { ?>
 													<tr>
-														<td><?php echo $format; ?></td>
-														<td><?php echo $list['jam_mulai']; ?></td>
-														<td><?php echo $list['jam_selesai']; ?></td>
-														<td><?php echo $list['nm_kelompok']; ?></td>
-														<td><?php echo $list['nama_pelajaran']; ?></td>
+														<td><?php echo $list['sesi']; ?></td>
+														<td><?php echo $list['nim']; ?></td>
+														<td><?php echo $list['nama_mhs']; ?></td>
+													</tr>
+													<tr>
+														<td><?php echo $list['pretest']; ?></td>
+														<td><?php echo $list['laporan']; ?></td>
+														<td><?php echo $list['nama_mhs']; ?></td>
+													</tr>
+													<tr>
 														<td><?php echo $list['nama']; ?></td>
 														<td>
 
-														<a href="<?php echo base_url() ?>back/jadwal/edit/<?php echo $list['id_jadwal'] ?>"> <label class="btn btn-info" >EDIT</a> &nbsp 
+														<a href="<?php echo base_url() ?>back/nilai_prak/edit/<?php echo $list['id_nilai_prak'] ?>"> <label class="btn btn-info" >EDIT</a> &nbsp 
                             <?php
                         //$level=$this->session->userdata('level');
                         // if($level == 1){?>
-                            <a href="<?php echo base_url() ?>back/jadwal/delete/<?php echo $list['id_jadwal'] ?>"onclick="return confirm ('Apakah Anda yakin akan menghapus data ini ?')"><label class="btn btn-danger" >DELETE</a><?php } ?></td></label></a></label></a></td></tr>
+                            <a href="<?php echo base_url() ?>back/nilai_prak/delete/<?php echo $list['id_nilai_prak'] ?>"onclick="return confirm ('Apakah Anda yakin akan menghapus data ini ?')"><label class="btn btn-danger" >DELETE</a><?php } ?></td></label></a></label></a></td></tr>
                           </tr>
 
                           <?php echo $this->session->flashdata('pesan'); ?>
@@ -66,9 +73,6 @@
                                 </table>
                             </div>
                         </div>
-                        <div align="center" class="panel-footer" style="height:40px;">
-                			<?php echo $halaman ?> <!--Memanggil variable pagination-->
-                 		</div>
                     </div>
                 </div>
             </div>

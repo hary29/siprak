@@ -46,6 +46,12 @@ class M_mahasiswa extends CI_Model {
     	return $query->result();
 	}
 
+	public function get_pelajaran()
+	{
+    	$query = $this->db->get('tb_pelajaran'); 
+    	return $query->result();
+	}
+
 	public function get_anjing_user($id)
 	{
 		$this->db->where('id_user', $id);
@@ -80,5 +86,11 @@ class M_mahasiswa extends CI_Model {
       	$this->db->where('nim', $data_mahasiswa['nim']);
       	$query = $this->db->get('tb_mahasiswa');
     	return $query->num_rows();
+	}
+	public function get_kelompok1($id){
+		$this->db->select('*');
+		$this->db->where('id_pelajaran', $id);
+		$query = $this->db->get('tb_kelompok');
+		return $query->result();
 	}
 }

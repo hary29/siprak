@@ -68,6 +68,9 @@
                                 </table>
                             </div>
                         </div>
+                         <div align="center" class="panel-footer" style="height:40px;">
+                			<?php echo $halaman ?> <!--Memanggil variable pagination-->
+                 		</div>
                     </div>
                 </div>
             </div>

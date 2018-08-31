@@ -28,6 +28,7 @@ class M_responsi extends CI_Model {
 	// Model untuk menambah data kelompok
 	public function tambah($data_responsi) {
 		$this->db->insert('tb_responsi', $data_responsi);
+		return $this->db->insert_id();
 	}
 	
 	// Update data kelompok
@@ -76,5 +77,13 @@ class M_responsi extends CI_Model {
       	$this->db->where('id_kurikulum', $data_responsi['id_kurikulum']);
       	$query = $this->db->get('tb_responsi');
     	return $query->num_rows();
+	}
+	public function cek_nilai_responsi($data_eksperimen,$data_mhs) 
+	{
+   		$this->db->select('*');
+      	$this->db->where('id_pelajaran', $data_eksperimen);
+      	$this->db->where('nim', $data_mhs);
+      	$query = $this->db->get('tb_responsi');
+    	return $query->result();
 	}
 }

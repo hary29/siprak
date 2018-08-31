@@ -46,16 +46,27 @@
                                         </div>
 
                                         <div class="form-group">
-                                        <label for="kelompok" class="col-sm-1">Kelompok</label>
-                                        <div class="col-sm-4">
-                                         <select name="id_kelompok" id="" class="form-control">
-                                            <?php 
-                                  foreach($kelompok as $kel) { ?>
-                                  <option value="<?php echo $kel->id_kelompok?>"<?php if($list['id_kelompok'] == ($kel->id_kelompok)){ echo 'selected'; } ?>><?php echo $kel->nm_kelompok?></option>
-                                  <?php } ?>
-                                         </select>
-                                        </div>
-                                        </div>
+			                              <label for="gejala" class="col-sm-4">Experimen</label>
+			                              <div class="col-sm-4">
+			                                  <select name="id_pelajaran" id="id_pelajaran" class="form-control">
+			                                  <option value="0">--Pilih pelajaran--</option>
+			                                  <?php foreach($pelajaran as $kel) { ?>
+			                                  <option value="<?php echo $kel->id_pelajaran?>"<?php if($list['id_pelajaran'] == ($kel->id_pelajaran)){ echo 'selected'; } ?>><?php echo $kel->nama_pelajaran?></option>
+			                                  <?php } ?>
+			                                  </select>
+			                              </div>
+			                          </div>
+
+			                            <div class="form-group">
+			                              <label for="gejala" class="col-sm-4">Kelompok</label>
+			                              <div class="col-sm-4">
+			                                  <select name="id_kelompok" id="id_kelompok" class="id_kelompok form-control">
+			                                  <?php foreach($kelompok as $kel) { ?>
+			                                  <option value="<?php echo $kel->id_kelompok?>"<?php if($list['id_kelompok'] == ($kel->id_kelompok)){ echo 'selected'; } else { ?> disabled="disabled" <?php }?>><?php echo $kel->nm_kelompok?></option>
+			                                  <?php } ?>
+			                                  </select>
+			                              </div>
+			                              </div>
 
                                         </br>
                                         
@@ -97,4 +108,29 @@
     });
 </script> 
                     </div></div></div></div></div>
+ <script src="<?php echo base_url(); ?>asset/js/jquery-2.2.3.min.js"></script>
+ <script type="text/javascript" src="<?php echo base_url(); ?>asset/js/jquery.chained.min.js"></script>
+ <script type="text/javascript">
+	$(document).ready(function(){
+		$('#id_pelajaran').change(function(){
+			var id=$(this).val();
+			$.ajax({
+				url : "<?php echo base_url();?>back/Mahasiswa/get_kelompok",
+				method : "POST",
+				data : {id: id},
+				async : false,
+		        dataType : 'json',
+				success: function(data){
+					var html = '';
+		            var i;
+		            for(i=0; i<data.length; i++){
+		                html += '<option value = "'+data[i].id_kelompok+'">'+data[i].nm_kelompok+'</option>';
+		            }
+		            $('.id_kelompok').html(html);
+					
+				}
+			});
+		});
+	});
+</script>
                   
