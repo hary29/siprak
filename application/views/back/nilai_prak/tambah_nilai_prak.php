@@ -27,6 +27,19 @@
                     <div style="float: left; width:50%" class="col-lg-6 col-md-6">
                         <div class="white-box">
                              <form class="form-horizontal" action="<?php echo base_url(). 'back/nilai_prak/tambah_aksi'; ?>" method="POST">
+
+								<div class="form-group">
+                              <label for="gejala" class="col-sm-4">Nama Mahasiswa</label>
+                              <div class="col-sm-10">
+                                  <select name="nim" id="nim" class="form-control">
+                                  <option value="0">--Pilih Mahasiswa--</option>
+                                  <?php foreach($prak as $m) { ?>
+                                  <option value="<?php echo $m['nim']?>"><?php echo $m['nim']?> - <?php echo $m['nama_mhs']?></option>
+                                  <?php } ?>
+                                  </select>
+                              </div>
+                              </div>
+
 								<?php foreach($prak as $m) { 
                                   	$sesi = $m['sesi'];
                                 }?>
@@ -53,18 +66,6 @@
                               </div>
                               </div>
 
-                              <div class="form-group">
-                              <label for="gejala" class="col-sm-4">Nama Mahasiswa</label>
-                              <div class="col-sm-10">
-                                  <select name="nim" id="nim" class="form-control">
-                                  <option value="0">--Pilih Mahasiswa--</option>
-                                  <?php foreach($prak as $m) { ?>
-                                  <option value="<?php echo $m['nim']?>"><?php echo $m['nim']?> - <?php echo $m['nama_mhs']?></option>
-                                  <?php } ?>
-                                  </select>
-                              </div>
-                              </div>
-
                               <!-- <div class="form-group">
                               <label for="gejala" class="col-sm-4">Nilai Pretest</label>
                               <div class="col-sm-10">
@@ -76,7 +77,7 @@
 					              <div class="controls">
 					            <div class="col-xs-2">
 					                <label class="radio-inline">
-					                    <input type="radio" name="pretest" value="1" class="detail"> ya
+					                    <input type="radio" name="pretest" value="1" class="detail" checked> ya
 					                </label>
 					            </div>
 					            <div class="col-xs-1">

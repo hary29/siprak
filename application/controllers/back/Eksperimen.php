@@ -153,8 +153,8 @@ class Eksperimen extends CI_Controller {
 					'class' => $nama,
 					'sesi' => $sesi
 					);
-					print_r($data_atr1);
-					echo '<br/>';
+					/*print_r($data_atr1);
+					echo '<br/>';*/
 					$this->M_atr->tambah($data_atr1);
 					//simpan di atr 1
 					$data_atr2 = array(
@@ -163,8 +163,8 @@ class Eksperimen extends CI_Controller {
 					'class' => $nama,
 					'sesi' => $sesi
 					);
-					print_r($data_atr2);
-					echo '<br/>';
+					/*print_r($data_atr2);
+					echo '<br/>';*/
 					$this->M_atr->tambah2($data_atr2);
 					//simpan di atr2
 				}
@@ -270,8 +270,8 @@ class Eksperimen extends CI_Controller {
 					'class' => $nama,
 					'sesi' => $sesi
 					);
-					print_r($data_atr1);
-					echo '<br/>';
+					/*print_r($data_atr1);
+					echo '<br/>';*/
 					$this->M_atr->tambah($data_atr1);
 					//simpan di atr 1
 					$data_atr2 = array(
@@ -280,8 +280,8 @@ class Eksperimen extends CI_Controller {
 					'class' => $nama,
 					'sesi' => $sesi
 					);
-					print_r($data_atr2);
-					echo '<br/>';
+					/*print_r($data_atr2);
+					echo '<br/>';*/
 					$this->M_atr->tambah2($data_atr2);
 					//simpan di atr2
 				}

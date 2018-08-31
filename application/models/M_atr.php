@@ -18,20 +18,9 @@ class M_atr extends CI_Model {
 	public function tambah($data_atr1) {
 		$this->db->insert('tb_atr_perm1', $data_atr1);
 	}
+
 	public function tambah2($data_atr2) {
 		$this->db->insert('tb_atr_perm2', $data_atr2);
-	}
-	
-	// Update data kelompok
-	public function edit($data_nilai_prak) {
-		$this->db->where('id_hasil_akhir', $data_nilai_prak['id_hasil_akhir']);
-		return $this->db->update('tb_hasil_akhir', $data_nilai_prak);
-	}
-	
-	// Hapus data kelompok
-	public function delete($id) {
-		$this->db->where('id_hasil_akhir',$id);
-		return $this->db->delete('tb_hasil_akhir');
 	}
 
 	public function cek_hasil_akhir($data_eksperimen,$data_mhs) 
@@ -42,4 +31,34 @@ class M_atr extends CI_Model {
       	$query = $this->db->get('tb_hasil_akhir');
     	return $query->result();
 	}
+
+	public function cek_aturan_perm1($nilai_akhir,$sesi) 
+	{
+   		$this->db->select('*');
+   		$this->db->where('sesi', $sesi);
+      	$this->db->where('batas_bawah <=', $nilai_akhir);
+		$this->db->Where('batas_atas >=', $nilai_akhir);
+      	$query = $this->db->get('tb_atr_perm1');
+    	return $query->result();
+	}
+
+	public function cek_aturan_perm2($responsi,$sesi) 
+	{
+   		$this->db->select('*');
+   		$this->db->where('sesi', $sesi);
+      	$this->db->where('batas_bawah <=', $responsi);
+		$this->db->where('batas_atas >=', $responsi);
+      	$query = $this->db->get('tb_atr_perm2');
+    	return $query->result();
+	}
+
+	public function cek_aturan_final($nilai,$responsi) 
+	{
+   		$this->db->select('*');
+      	$this->db->where('permis1', $nilai);
+		$this->db->where('permis2', $responsi);
+      	$query = $this->db->get('tb_aturan');
+    	return $query->result();
+	}
+	
 }

@@ -12,6 +12,7 @@ class Responsi extends CI_Controller {
 		$this->load->model('M_nilai_prak');
 		$this->load->model('M_eksperimen');
 		$this->load->model('M_hasil_akhir');
+		$this->load->model('M_atr');
 	}
 
 	public function index($offset=0)
@@ -87,15 +88,30 @@ class Responsi extends CI_Controller {
 	}
 
 	public function tambah_aksi(){
+
+		$data_eksperimen = $this->input->post('id_pelajaran');
+		$cari_sesi=$this->M_eksperimen->get_cari_sesi($data_eksperimen);
+		$sesi = $cari_sesi->sesi;
+		$responsi = $this->input->post('nilai_responsi');
+				//print_r($nilai_akhir);exit;
+				//$sesi = $cari_sesi->sesi;
+				//cari class dan id aturan prem1
+		$clustering = $this->M_atr->cek_aturan_perm2($responsi,$sesi);
+		foreach ($clustering as $key => $value) {
+			$class = $value->class;
+			$id_prem2 = $value->id_atr_perm2;
+		}
+
 		$data_responsi = array(
 			'id_responsi' => $this->input->post('id_responsi'),
 			'nilai_responsi' => $this->input->post('nilai_responsi'),
 			'nim' => $this->input->post('nim'),
 			'id_atr_perm2' => $this->input->post('id_atr_perm2'),
 			'id_kurikulum' => $this->input->post('id_kurikulum'),
-			'id_user' => $this->input->post('id_user')
+			'id_user' => $this->input->post('id_user'),
+			'id_atr_perm2' => $id_prem2
 			);
-
+		
 			//print_r($data_bobot);exit;
 			//cek kesamaan data jika sama maka tidak di simpan
 			$cek=$this->M_responsi->get_cari_sama($data_responsi);
@@ -196,13 +212,28 @@ class Responsi extends CI_Controller {
 			$this->session->set_flashdata('sukses', "<div class=\"alert alert-danger\" id=\"alert\"><i class=\"\"><strong>error!</strong><br></i> Gagal merubah</div>");
 	redirect('back/responsi');
 		}else{
+
+	$data_eksperimen = $this->input->post('id_pelajaran');
+		$cari_sesi=$this->M_eksperimen->get_cari_sesi($data_eksperimen);
+		$sesi = $cari_sesi->sesi;
+		$responsi = $this->input->post('nilai_responsi');
+				//print_r($nilai_akhir);exit;
+				//$sesi = $cari_sesi->sesi;
+				//cari class dan id aturan prem1
+		$clustering = $this->M_atr->cek_aturan_perm2($responsi,$sesi);
+		foreach ($clustering as $key => $value) {
+			$class = $value->class;
+			$id_prem2 = $value->id_atr_perm2;
+		}
+
 	$data_responsi = array(
 			'id_responsi' => $this->input->post('id_responsi'),
 			'nilai_responsi' => $this->input->post('nilai_responsi'),
 			'nim' => $this->input->post('nim'),
 			'id_atr_perm2' => $this->input->post('id_atr_perm2'),
 			'id_kurikulum' => $this->input->post('id_kurikulum'),
-			'id_user' => $this->input->post('id_user')
+			'id_user' => $this->input->post('id_user'),
+			'id_atr_perm2' => $id_prem2
 			);
 //print_r($data_user);exit;
 	$resp = $this->input->post('id_responsi');

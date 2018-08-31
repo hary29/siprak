@@ -13,6 +13,7 @@ class Nilai_prak extends CI_Controller {
 		$this->load->model('M_eksperimen');
 		$this->load->model('M_responsi');
 		$this->load->model('M_hasil_akhir');
+		$this->load->model('M_atr');
 	}
 
 	public function index($offset=0)
@@ -132,12 +133,22 @@ class Nilai_prak extends CI_Controller {
 					$laporan = $key->laporan;
 				}
 				//cari nilai akhir
-				$nilai_akhir = ($pretest+$laporan)/$get;
+				$sesi = $cari_sesi->sesi;
+				$nilai_akhir = ($pretest+$laporan)/$sesi;
+				//print_r($nilai_akhir);exit;
+				//$sesi = $cari_sesi->sesi;
+				//cari class dan id aturan prem1
+				$clustering = $this->M_atr->cek_aturan_perm1($nilai_akhir,$sesi);
+				foreach ($clustering as $key => $value) {
+					$class = $value->class;
+					$id_prem1 = $value->id_atr_perm1;
+				}
 				
 				$data_nilai_prak = array(
 				'id_pelajaran' => $this->input->post('id_pelajaran'),
 				'nim' => $this->input->post('nim'),
-				'nilai' => $nilai_akhir
+				'nilai' => $nilai_akhir,
+				'id_atr_perm1' => $id_prem1
 				);
 				$cek_nilai =$this->M_nilai_prak->cek_nilai_akhir($data_eksperimen,$data_mhs);
 				
@@ -153,15 +164,19 @@ class Nilai_prak extends CI_Controller {
 						if($cek_responsi == null){
 							$responsi = 0;
 							$id_responsi = '';
+							//$id_atr_prem2 = '';
 						}else{
 							foreach ($cek_responsi as $key) {
 								//cek responsi jika kosong maka ubah ke 0
 								$responsi = isset($key->nilai_responsi)? $key->nilai_responsi : '0';
 								$id_responsi = isset($key->id_responsi)? $key->id_responsi : '';
+								//$id_atr_prem2 = isset($key->id_atr_prem2)? $key->id_atr_prem2 : '';
 							}
 						}
 
 						 $nilai_final = ($nilai_akhir+$responsi)/2;
+						 //cari class dari nilai final
+
 						 //print_r($responsi);exit;
 						//print_r($cek_hasil_akhir);exit;
 							//jika cek nilai kosong maka buat baru
@@ -205,7 +220,8 @@ class Nilai_prak extends CI_Controller {
 						'id_pelajaran' => $this->input->post('id_pelajaran'),
 						'nim' => $this->input->post('nim'),
 						'nilai' => $nilai_akhir,
-						'id_prak_akhir' => $id
+						'id_prak_akhir' => $id,
+						'id_atr_perm1' => $id_prem1
 						);
 						$this->M_nilai_prak->edit_akhir($data_nilai_prak);
 												
@@ -261,7 +277,7 @@ class Nilai_prak extends CI_Controller {
 					}
 
 				$this->session->set_flashdata("pesan", "<div class=\"alert alert-success\" id=\"alert\"><i class=\"glyphicon glyphicon-ok\"></i> Berhasil menambah data</div>");
-				redirect('back/nilai_prak');
+				redirect('back/nilai_prak/tambah');
 			}
 		else{
 			$this->session->set_flashdata('sukses', "<div class=\"alert alert-danger\" id=\"alert\"><i class=\"\"><strong>error!</strong><br></i> Data sudah ada</div>");
