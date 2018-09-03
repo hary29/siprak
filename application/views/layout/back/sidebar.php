@@ -28,9 +28,11 @@ if($level==1){?>
                     </li>
 
                     <li class="nav-small-cap m-t-10">--- Manage</li>
-                    <li> <a href="javascript:void(0);" class="waves-effect"><i class="ti-calendar p-r-10"></i> <span class="hide-menu"> Metode <span class="fa arrow"></span></span></a>
+                    <li> <a href="javascript:void(0);" class="waves-effect"><i class="ti-calendar p-r-10"></i> <span class="hide-menu"> Aturan <span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
-                            <li> <a href="<?php echo base_url() ?>back/bayes">Batasan bayes</a> </li>
+                            <li> <a href="<?php echo base_url() ?>back/aturan/praktikum">Aturan Nilai Praktikum</a> </li>
+                            <li> <a href="<?php echo base_url() ?>back/aturan/responsi">Aturan Nilai Responsi</a> </li>
+                            <li> <a href="<?php echo base_url() ?>back/aturan/Akhir">Aturan Nilai Akhir</a> </li>
                             <!-- <li> <a href="book-appointment.html">Book Appointment</a> </li> -->
                         </ul>
                     </li>
@@ -198,10 +200,11 @@ if($level==1){?>
                     <li> <a href="<?php echo base_url() ?>back/home_back" class="waves-effect"><i class="ti-dashboard p-r-10"></i> <span class="hide-menu">Dashboard</span></a>
                     </li>
 
-                    <li class="nav-small-cap m-t-10">--- Manage</li>
-                    <li> <a href="javascript:void(0);" class="waves-effect"><i class="ti-calendar p-r-10"></i> <span class="hide-menu"> Metode <span class="fa arrow"></span></span></a>
+                    <li> <a href="javascript:void(0);" class="waves-effect"><i class="ti-calendar p-r-10"></i> <span class="hide-menu"> Aturan <span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
-                            <li> <a href="<?php echo base_url() ?>back/bayes">Batasan bayes</a> </li>
+                            <li> <a href="<?php echo base_url() ?>back/aturan/praktikum">Aturan Nilai Praktikum</a> </li>
+                            <li> <a href="<?php echo base_url() ?>back/aturan/responsi">Aturan Nilai Responsi</a> </li>
+                            <li> <a href="<?php echo base_url() ?>back/aturan/Akhir">Aturan Nilai Akhir</a> </li>
                             <!-- <li> <a href="book-appointment.html">Book Appointment</a> </li> -->
                         </ul>
                     </li>

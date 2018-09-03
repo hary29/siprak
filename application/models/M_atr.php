@@ -60,5 +60,27 @@ class M_atr extends CI_Model {
       	$query = $this->db->get('tb_aturan');
     	return $query->result();
 	}
+
+	public function daftar_aturan_praktikum($num,$offset) {
+		$this->db->select('*');
+  		$this->db->order_by('id_atr_perm1','asc');
+  		$query = $this->db->get('tb_atr_perm1',$num,$offset);
+        return $query->result_array();
+	}
+
+	public function daftar_aturan_responsi($num,$offset) {
+		$this->db->select('*');
+  		$this->db->order_by('id_atr_perm2','asc');
+  		$query = $this->db->get('tb_atr_perm2',$num,$offset);
+        return $query->result_array();
+	}
+
+	public function daftar_aturan_akhir($num,$offset) {
+		$this->db->select('*');
+  		$this->db->order_by('id_aturan','asc');
+  		$query = $this->db->get('tb_aturan',$num,$offset);
+        return $query->result_array();
+	}
+
 	
 }
