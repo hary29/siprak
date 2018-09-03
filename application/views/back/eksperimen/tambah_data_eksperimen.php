@@ -32,7 +32,7 @@
                               <label for="" class="col-sm-4">Semester</label>
                               <div class="col-sm-4">
                                   <select name="id_kurikulum" id="" class="form-control">
-                                  <option>--Pilih Semester--</option>
+                                  <option  value="">--Pilih Semester--</option>
                                   <?php foreach($kurikulum as $ass) { ?>
                                   <option value="<?php echo $ass['id_kurikulum']?>"><?php echo $ass['semester']?>&nbsp<?php echo $ass['tahun']?></option>
                                   <?php } ?>

@@ -10,15 +10,17 @@ class M_hasil_akhir extends CI_Model {
     }
 	
 	// Menampilkan data kelompok
-	public function daftar_nilai($num,$offset) {
+	public function daftar_nilai($num,$offset,$id) {
 		$this->db->select('*');
-  		$this->db->from('tb_hasil_akhir','tb_user','tb_mahasiswa','tb_pelajaran','tb_prak_akhir','tb_responsi');
+  		$this->db->from('tb_hasil_akhir','tb_user','tb_mahasiswa','tb_pelajaran','tb_prak_akhir','tb_responsi','tb_aturan');
   		$this->db->join('tb_user','tb_hasil_akhir.id_user = tb_user.id_user','left');
   		$this->db->join('tb_mahasiswa','tb_hasil_akhir.nim = tb_mahasiswa.nim','left');
   		$this->db->join('tb_pelajaran','tb_hasil_akhir.id_pelajaran = tb_pelajaran.id_pelajaran','left');
-  		$this->db->join('tb_prak_akhir','tb_hasil_akir.id_prak_akhir = tb_prak_akhir.id_prak_akhir','left');
+  		$this->db->join('tb_prak_akhir','tb_hasil_akhir.id_prak_akhir = tb_prak_akhir.id_prak_akhir','left');
   		$this->db->join('tb_responsi','tb_hasil_akhir.id_responsi = tb_responsi.id_responsi','left');
-  		$this->db->order_by('tb_hasil_akhir.nilai','asc');
+  		$this->db->join('tb_aturan','tb_hasil_akhir.id_aturan = tb_aturan.id_aturan','left');
+  		$this->db->where('tb_hasil_akhir.id_pelajaran',$id);
+  		$this->db->order_by('tb_hasil_akhir.nilai_akhir','desc');
   		$query = $this->db->get('',$num,$offset);
         return $query->result_array();
 	}

@@ -65,6 +65,7 @@ class Nilai_prak extends CI_Controller {
 	}
 
 	public function tambah() {
+		
 		$data['user'] = $this->M_nilai_prak->get_user();
 		$data['mhs'] = $this->M_nilai_prak->get_mahasiswa();
 		$data['pel'] = $this->M_nilai_prak->get_pelajaran();
@@ -79,7 +80,15 @@ class Nilai_prak extends CI_Controller {
 
 	public function pilih_experimen(){
 
-		$id = $this->input->post('id_pelajaran');
+		if(empty($_GET['id']))
+		{
+			$id = $this->input->post('id_pelajaran');
+		}
+	else{
+		$id = isset($_GET['id'])?$_GET['id'] : '';
+		}
+		//print_r($id);exit;
+		
 		$data['prak']=$this->M_eksperimen->cari_eksperimen($id);
 		$data['user'] = $this->M_nilai_prak->get_user();
 		$data['pelajaran'] = $id;
@@ -140,11 +149,11 @@ class Nilai_prak extends CI_Controller {
 				//cari class dan id aturan prem1
 				$clustering = $this->M_atr->cek_aturan_perm1($nilai_akhir,$sesi);
 				foreach ($clustering as $key => $value) {
-					$class = $value->class;
+					$class_prem1 = $value->class;
 					$id_prem1 = $value->id_atr_perm1;
 				}
 				
-				$data_nilai_prak = array(
+				$data_nilai_prak_akhir = array(
 				'id_pelajaran' => $this->input->post('id_pelajaran'),
 				'nim' => $this->input->post('nim'),
 				'nilai' => $nilai_akhir,
@@ -154,7 +163,7 @@ class Nilai_prak extends CI_Controller {
 				
 					//jika cek nilai kosong maka buat baru
 					if (empty($cek_nilai)){
-						$id_p = $this->M_nilai_prak->tambah_akhir($data_nilai_prak);
+						$id_p = $this->M_nilai_prak->tambah_akhir($data_nilai_prak_akhir);
 						//print_r($input);exit;
 						//tambah ke hasil akhir
 						
@@ -164,19 +173,24 @@ class Nilai_prak extends CI_Controller {
 						if($cek_responsi == null){
 							$responsi = 0;
 							$id_responsi = '';
-							//$id_atr_prem2 = '';
+							$id_atr_prem2 = '';
+							$class_prem2 = '';
 						}else{
 							foreach ($cek_responsi as $key) {
 								//cek responsi jika kosong maka ubah ke 0
 								$responsi = isset($key->nilai_responsi)? $key->nilai_responsi : '0';
 								$id_responsi = isset($key->id_responsi)? $key->id_responsi : '';
-								//$id_atr_prem2 = isset($key->id_atr_prem2)? $key->id_atr_prem2 : '';
+								$id_atr_prem2 = isset($key->id_atr_perm2)? $key->id_atr_perm2 : '';
+								$class_prem2 = isset($key->class)? $key->class : '';
 							}
 						}
 
 						 $nilai_final = ($nilai_akhir+$responsi)/2;
 						 //cari class dari nilai final
-
+						 $atr_final = $this->M_atr->cek_aturan_final($class_prem1,$class_prem2);
+						 foreach ($atr_final as $key => $value_final) {
+						 	$id_aturan = isset($key->id_aturan)? $key->id_aturan : '';
+						 }
 						 //print_r($responsi);exit;
 						//print_r($cek_hasil_akhir);exit;
 							//jika cek nilai kosong maka buat baru
@@ -193,7 +207,8 @@ class Nilai_prak extends CI_Controller {
 									'nim' => $this->input->post('nim'),
 									'id_responsi' => $id_responsi,
 									'id_prak_akhir' => $id_p,
-									'nilai' => $nilai_final
+									'nilai_akhir' => $nilai_final,
+									'id_aturan' => $id_aturan
 								);
 								$this->M_hasil_akhir->tambah($data_nilai_akhir);
 
@@ -207,7 +222,8 @@ class Nilai_prak extends CI_Controller {
 								$data_nilai_prak = array(
 									'id_hasil_akhir' => $id_akhir,
 									'id_responsi' => $id_responsi,
-									'nilai' => $nilai_final
+									'nilai_akhir' => $nilai_final,
+									'id_aturan' => $id_aturan
 								);
 								$this->M_hasil_akhir->edit($data_nilai_prak);
 							}
@@ -231,15 +247,24 @@ class Nilai_prak extends CI_Controller {
 						if($cek_responsi == null){
 							$responsi = 0;
 							$id_responsi = '';
+							$id_atr_prem2 = '';
+							$class_prem2 = '';
 						}else{
 							foreach ($cek_responsi as $key) {
 								//cek responsi jika kosong maka ubah ke 0
 								$responsi = isset($key->nilai_responsi)? $key->nilai_responsi : '0';
 								$id_responsi = isset($key->id_responsi)? $key->id_responsi : '';
+								$id_atr_prem2 = isset($key->id_atr_prem2)? $key->id_atr_prem2 : '';
+								$class_prem2 = isset($key->class)? $key->class : '';
 							}
 						}
 
 						 $nilai_final = ($nilai_akhir+$responsi)/2;
+						 //cari class dari nilai final
+						 $atr_final = $this->M_atr->cek_aturan_final($class_prem1,$class_prem2);
+						 foreach ($atr_final as $key => $value_final) {
+						 	$id_aturan = isset($key->id_aturan)? $key->id_aturan : '';
+						 }
 						 //print_r($responsi);exit;
 						//print_r($cek_hasil_akhir);exit;
 							//jika cek nilai kosong maka buat baru
@@ -255,8 +280,9 @@ class Nilai_prak extends CI_Controller {
 									'id_pelajaran' => $this->input->post('id_pelajaran'),
 									'nim' => $this->input->post('nim'),
 									'id_responsi' => $id_responsi,
-									'id_prak_akhir' => $id_p,
-									'nilai' => $nilai_final
+									'id_prak_akhir' => $id,
+									'nilai_akhir' => $nilai_final,
+									'id_aturan'=>$id_aturan
 								);
 								$this->M_hasil_akhir->tambah($data_nilai_akhir);
 
@@ -270,18 +296,19 @@ class Nilai_prak extends CI_Controller {
 								$data_nilai_prak = array(
 									'id_hasil_akhir' => $id_akhir,
 									'id_responsi' => $id_responsi,
-									'nilai' => $nilai_final
+									'nilai_akhir' => $nilai_final,
+									'id_aturan' => $id_aturan
 								);
 								$this->M_hasil_akhir->edit($data_nilai_prak);
 							}
-					}
+						}
 
-				$this->session->set_flashdata("pesan", "<div class=\"alert alert-success\" id=\"alert\"><i class=\"glyphicon glyphicon-ok\"></i> Berhasil menambah data</div>");
-				redirect('back/nilai_prak/tambah');
+				$this->session->set_flashdata('sukses', "<div class=\"alert alert-success\" id=\"alert\"><i class=\"glyphicon glyphicon-ok\"></i> Berhasil menambah data</div>");
+				redirect('back/nilai_prak/pilih_experimen?id='.$data_eksperimen);
 			}
 		else{
 			$this->session->set_flashdata('sukses', "<div class=\"alert alert-danger\" id=\"alert\"><i class=\"\"><strong>error!</strong><br></i> Data sudah ada</div>");
-			redirect('back/nilai_prak/tambah');
+			redirect('back/nilai_prak/pilih_experimen?id='.$data_eksperimen);
 		}
 	}
 
@@ -333,27 +360,60 @@ class Nilai_prak extends CI_Controller {
 				$data_mhs = $this->input->post('nim');
 				$cek_nilai =$this->M_nilai_prak->cek_nilai_akhir($data_eksperimen,$data_mhs);
 
+				$cek1 =$this->M_nilai_prak->get_nilai_akhir($data_eksperimen,$data_mhs);
+				foreach ($cek1 as $key) {
+					$pretest = $key->pretest;
+					$laporan = $key->laporan;
+				}
+				//cari nilai akhir
+				$sesi = $cari_sesi->sesi;
+				$nilai_akhir = ($pretest+$laporan)/$sesi;
+				//print_r($nilai_akhir);exit;
+				//$sesi = $cari_sesi->sesi;
+				//cari class dan id aturan prem1
+				$clustering = $this->M_atr->cek_aturan_perm1($nilai_akhir,$sesi);
+				foreach ($clustering as $key => $value) {
+					$class_prem1 = $value->class;
+					$id_prem1 = $value->id_atr_perm1;
+				}
+
+				$data_nilai_prak_akhir = array(
+					'id_pelajaran' => $this->input->post('id_pelajaran'),
+					'nim' => $this->input->post('nim'),
+					'id_user' => $this->input->post('id_user'),
+					'nilai' => $nilai_akhir,
+					'id_perm1' =>$id_prem1
+					);
 			//jika cek nilai kosong maka buat baru
 				if (empty($cek_nilai)){
-					$id_p = $this->M_nilai_prak->tambah_akhir($data_nilai_prak);
+					$id_p = $this->M_nilai_prak->tambah_akhir($data_nilai_prak_akhir);
 					//print_r($input);exit;
 					//tambah ke hasil akhir
 					$cek_hasil_akhir =$this->M_hasil_akhir->cek_hasil_akhir($data_eksperimen,$data_mhs);
 					//get responsi
 					$cek_responsi = $this->M_responsi->cek_nilai_responsi($data_eksperimen,$data_mhs);
 					//print_r($cek_responsi);exit;
-					if($cek_responsi == null){
-						$responsi = 0;
-						$id_responsi = '';
-					}else{
-						foreach ($cek_responsi as $key) {
-							//cek responsi jika kosong maka ubah ke 0
-							$responsi = isset($key->nilai_responsi)? $key->nilai_responsi : '0';
-							$id_responsi = isset($key->id_responsi)? $key->id_responsi : '';
+						if($cek_responsi == null){
+							$responsi = 0;
+							$id_responsi = '';
+							$id_atr_prem2 = '';
+							$class_prem2 = '';
+						}else{
+							foreach ($cek_responsi as $key) {
+								//cek responsi jika kosong maka ubah ke 0
+								$responsi = isset($key->nilai_responsi)? $key->nilai_responsi : '0';
+								$id_responsi = isset($key->id_responsi)? $key->id_responsi : '';
+								$id_atr_prem2 = isset($key->id_atr_prem2)? $key->id_atr_prem2 : '';
+								$class_prem2 = isset($key->class)? $key->class : '';
+							}
 						}
-					}
 
-					$nilai_final = ($nilai_akhir+$responsi)/2;
+					 $nilai_final = ($nilai_akhir+$responsi)/2;
+						 //cari class dari nilai final
+						 $atr_final = $this->M_atr->cek_aturan_final($class_prem1,$class_prem2);
+						 foreach ($atr_final as $key => $value_final) {
+						 	$id_aturan = isset($key->id_aturan)? $key->id_aturan : '';
+						 }
 					 //print_r($responsi);exit;
 					//print_r($cek_hasil_akhir);exit;
 						//jika cek nilai kosong maka buat baru
@@ -370,7 +430,8 @@ class Nilai_prak extends CI_Controller {
 							'nim' => $this->input->post('nim'),
 							'id_responsi' => $id_responsi,
 							'id_prak_akhir' => $id_p,
-							'nilai' => $nilai_final
+							'nilai_akhir' => $nilai_final,
+							'id_aturan' =>$id_aturan
 						);
 						$this->M_hasil_akhir->tambah($data_nilai_akhir);
 
@@ -384,7 +445,8 @@ class Nilai_prak extends CI_Controller {
 						$data_nilai_prak = array(
 							'id_hasil_akhir' => $id_akhir,
 							'id_responsi' => $id_responsi,
-							'nilai' => $nilai_final
+							'nilai_akhir' => $nilai_final,
+							'id_aturan' => $id_aturan
 						);
 						$this->M_hasil_akhir->edit($data_nilai_prak);
 					}
@@ -398,25 +460,36 @@ class Nilai_prak extends CI_Controller {
 					'id_pelajaran' => $this->input->post('id_pelajaran'),
 					'nim' => $this->input->post('nim'),
 					'nilai' => $nilai_akhir,
-					'id_prak_akhir' => $id
+					'id_prak_akhir' => $id,
+					'nilai' => $nilai_akhir,
+					'id_perm1' =>$id_prem1
 					);
 					$this->M_nilai_prak->edit_akhir($data_nilai_prak);
 											$cek_hasil_akhir =$this->M_hasil_akhir->cek_hasil_akhir($data_eksperimen,$data_mhs);
 					//get responsi
 					$cek_responsi = $this->M_responsi->cek_nilai_responsi($data_eksperimen,$data_mhs);
 					//print_r($cek_responsi);exit;
-					if($cek_responsi == null){
-						$responsi = 0;
-						$id_responsi = '';
-					}else{
-						foreach ($cek_responsi as $key) {
-							//cek responsi jika kosong maka ubah ke 0
-							$responsi = isset($key->nilai_responsi)? $key->nilai_responsi : '0';
-							$id_responsi = isset($key->id_responsi)? $key->id_responsi : '';
+						if($cek_responsi == null){
+							$responsi = 0;
+							$id_responsi = '';
+							$id_atr_prem2 = '';
+							$class_prem2 = '';
+						}else{
+							foreach ($cek_responsi as $key) {
+								//cek responsi jika kosong maka ubah ke 0
+								$responsi = isset($key->nilai_responsi)? $key->nilai_responsi : '0';
+								$id_responsi = isset($key->id_responsi)? $key->id_responsi : '';
+								$id_atr_prem2 = isset($key->id_atr_prem2)? $key->id_atr_prem2 : '';
+								$class_prem2 = isset($key->class)? $key->class : '';
+							}
 						}
-					}
 
-					 $nilai_final = ($nilai_akhir+$responsi)/2;
+					  $nilai_final = ($nilai_akhir+$responsi)/2;
+						 //cari class dari nilai final
+						 $atr_final = $this->M_atr->cek_aturan_final($class_prem1,$class_prem2);
+						 foreach ($atr_final as $key => $value_final) {
+						 	$id_aturan = isset($key->id_aturan)? $key->id_aturan : '';
+						 }
 					 //print_r($responsi);exit;
 					//print_r($cek_hasil_akhir);exit;
 						//jika cek nilai kosong maka buat baru
@@ -433,8 +506,9 @@ class Nilai_prak extends CI_Controller {
 							'id_pelajaran' => $this->input->post('id_pelajaran'),
 							'nim' => $this->input->post('nim'),
 							'id_responsi' => $id_responsi,
-							'id_prak_akhir' => $id_p,
-							'nilai' => $nilai_final
+							'id_prak_akhir' => $id,
+							'nilai_akhir' => $nilai_final,
+							'id_aturan' => $id_aturan
 						);
 						$this->M_hasil_akhir->tambah($data_nilai_akhir);
 					}
@@ -447,7 +521,8 @@ class Nilai_prak extends CI_Controller {
 						$data_nilai_prak = array(
 							'id_hasil_akhir' => $id_akhir,
 							'id_responsi' => $id_responsi,
-							'nilai' => $nilai_final
+							'nilai_akhir' => $nilai_final,
+							'id_aturan' => $id_aturan
 						);
 						$this->M_hasil_akhir->edit($data_nilai_prak);
 					}

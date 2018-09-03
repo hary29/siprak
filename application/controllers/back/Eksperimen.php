@@ -77,7 +77,7 @@ class Eksperimen extends CI_Controller {
 		$this->form_validation->set_rules('id_kurikulum','id_kurikulum','required');
 		$this->form_validation->set_rules('sesi','sesi','required');
 		if($this->form_validation->run() == false){
-			$this->session->set_flashdata('sukses', "<div class=\"alert alert-danger\" id=\"alert\"><i class=\"\"><strong>error!</strong><br></i> Gagal merubah data</div>");
+			$this->session->set_flashdata('sukses', "<div class=\"alert alert-danger\" id=\"alert\"><i class=\"\"><strong>error!</strong><br></i> Gagal menambah data</div>");
 			redirect('back/Eksperimen');
 		}
 		$data_eksperimen = array(
@@ -106,7 +106,7 @@ class Eksperimen extends CI_Controller {
 				$hasil = $sesi*$nmax;
 				 //atr2
 				 //ambil nilai max responsi * sesi untuk tertinggi
-				$resMax = 4;
+				$resMax = 10;
 				 //tentukan total
 				$totalResp = $resMax*$sesi;
 				 //print_r($totalResp);
@@ -223,7 +223,7 @@ class Eksperimen extends CI_Controller {
 				$hasil = $sesi*$nmax;
 				 //atr2
 				 //ambil nilai max responsi * sesi untuk tertinggi
-				$resMax = 4;
+				$resMax = 10;
 				 //tentukan total
 				$totalResp = $resMax*$sesi;
 				 //print_r($totalResp);

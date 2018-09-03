@@ -30,8 +30,8 @@ class M_nilai_prak extends CI_Model {
 		$this->db->insert('tb_nilai_prak', $data_nilai_prak);
 	}
 
-	public function tambah_akhir($data_nilai_prak) {
-		$this->db->insert('tb_prak_akhir', $data_nilai_prak);
+	public function tambah_akhir($data_nilai_prak_akhir) {
+		$this->db->insert('tb_prak_akhir', $data_nilai_prak_akhir);
 		return $this->db->insert_id();
 	}
 	
@@ -117,6 +117,16 @@ class M_nilai_prak extends CI_Model {
       	$this->db->where('id_pelajaran', $data_eksperimen);
       	$this->db->where('nim', $data_mhs);
       	$query = $this->db->get('tb_prak_akhir');
+    	return $query->result();
+	}
+	public function cek_nilai_prak($data_eksperimen,$data_mhs) 
+	{
+   		$this->db->select('*');
+  		$this->db->from('tb_prak_akhir','tb_atr_perm1');
+  		$this->db->join('tb_atr_perm1','tb_prak_akhir.id_atr_perm1 = tb_atr_perm1.id_atr_perm1','left');
+      	$this->db->where('tb_prak_akhir.id_pelajaran', $data_eksperimen);
+      	$this->db->where('tb_prak_akhir.nim', $data_mhs);
+      	$query = $this->db->get('');
     	return $query->result();
 	}
 }

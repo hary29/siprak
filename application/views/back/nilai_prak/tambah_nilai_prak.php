@@ -14,12 +14,13 @@
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
+                <div id="notif">
                   <?php 
   if ($this->session->flashdata('sukses')) {
     echo '<p class="warning" style="margin: 10px 20px;">'.$this->session->flashdata('sukses').'</p>';
   }
   echo validation_errors('<p class="warning" style="margin: 10px 20px;">','</p>');
-   ?>
+   ?></div>
                 <?php $id=$this->session->userdata('id');?>
                 
                 <div class="container">
@@ -134,10 +135,12 @@
            $('#nim').change(function(){//Memberikan even ketika class detail di klik (class detail ialah class radio button)
              // if ($("input[name='darah']:checked").val() == "0" ) { //Jika radio button "berbeda" dipilih maka tampilkan form-inputan
              if ($('#nim').val() == "0" ) {
-                  $("#test").slideUp("fast");  //Efek Slide Up (Menghilangkan Form Input)
+                  $("#test").slideUp("fast");
+                  $("#notif").slideUp("fast");  //Efek Slide Up (Menghilangkan Form Input)
               }
               else{
-                  $("#test").slideDown("fast"); //Efek Slide Down (Menampilkan Form Input)
+                  $("#test").slideDown("fast");
+                  $("#notif").slideUp("fast"); //Efek Slide Down (Menampilkan Form Input)
               }
               //} else {
              

@@ -52,11 +52,11 @@ class M_atr extends CI_Model {
     	return $query->result();
 	}
 
-	public function cek_aturan_final($nilai,$responsi) 
+	public function cek_aturan_final($class_prem1,$class_prem2) 
 	{
    		$this->db->select('*');
-      	$this->db->where('permis1', $nilai);
-		$this->db->where('permis2', $responsi);
+      	$this->db->where('permis1', $class_prem1);
+		$this->db->where('permis2', $class_prem2);
       	$query = $this->db->get('tb_aturan');
     	return $query->result();
 	}

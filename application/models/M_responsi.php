@@ -81,9 +81,11 @@ class M_responsi extends CI_Model {
 	public function cek_nilai_responsi($data_eksperimen,$data_mhs) 
 	{
    		$this->db->select('*');
-      	$this->db->where('id_pelajaran', $data_eksperimen);
-      	$this->db->where('nim', $data_mhs);
-      	$query = $this->db->get('tb_responsi');
+  		$this->db->from('tb_responsi','tb_atr_perm2');
+  		$this->db->join('tb_atr_perm2','tb_responsi.id_atr_perm2 = tb_atr_perm2.id_atr_perm2','left');
+      	$this->db->where('tb_responsi.id_pelajaran', $data_eksperimen);
+      	$this->db->where('tb_responsi.nim', $data_mhs);
+      	$query = $this->db->get('');
     	return $query->result();
 	}
 }
