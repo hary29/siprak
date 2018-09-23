@@ -104,6 +104,12 @@ if($level==1){?>
                             <!-- <li> <a href="sales-report.html">Sales Report</a></li> -->
                         </ul>
                     </li>
+
+                    <li> <a href="javascript:void(0);" class="waves-effect"><i class="icon-chart p-r-10"></i> <span class="hide-menu"> Data Nilai Akhir<span class="fa arrow"></span></span></a>
+                        <ul class="nav nav-second-level">
+                            <li> <a href="<?php echo base_url() ?>back/hasil_akhir">Semua Nilai Akhir</a></li>
+                        </ul>
+                    </li>
                     
                     <li><a href="<?php echo base_url() ?>front/Log/logout" class="waves-effect"><i class="icon-logout fa-fw"></i> <span class="hide-menu">Log out</span></a></li>
                     <li class="hide-menu">

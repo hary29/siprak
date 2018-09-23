@@ -2,37 +2,6 @@
 		<div class="gtco-container">
 			<div class="row row-p	b-md">
 
-				<div class="col-md-4">
-					<div class="gtco-widget">
-						<h3>About <span class="footer-logo">Splash<span>.<span></span></h3>
-						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore eos molestias quod sint ipsum possimus temporibus officia iste perspiciatis consectetur in fugiat repudiandae cum. Totam cupiditate nostrum ut neque ab?</p>
-					</div>
-				</div>
-
-				<div class="col-md-4 col-md-push-1">
-					<div class="gtco-widget">
-						<h3>Links</h3>
-						<ul class="gtco-footer-links">
-							<li><a href="#">Knowledge Base</a></li>
-							<li><a href="#">Career</a></li>
-							<li><a href="#">Press</a></li>
-							<li><a href="#">Terms of services</a></li>
-							<li><a href="#">Privacy Policy</a></li>
-						</ul>
-					</div>
-				</div>
-
-				<div class="col-md-4">
-					<div class="gtco-widget">
-						<h3>Get In Touch</h3>
-						<ul class="gtco-quick-contact">
-							<li><a href="#"><i class="icon-phone"></i> +1 234 567 890</a></li>
-							<li><a href="#"><i class="icon-mail2"></i> info@FreeHTML5.co</a></li>
-							<li><a href="#"><i class="icon-chat"></i> Live Chat</a></li>
-						</ul>
-					</div>
-				</div>
-
 			</div>
 
 			<div class="row copyright">

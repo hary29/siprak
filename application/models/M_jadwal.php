@@ -71,8 +71,8 @@ class M_jadwal extends CI_Model {
   		$this->db->join('tb_kelompok','tb_kelompok.id_kelompok = tb_jadwal.id_kelompok','left');
   		$this->db->join('tb_pelajaran','tb_pelajaran.id_pelajaran = tb_jadwal.id_pelajaran','left');
   		$this->db->join('tb_user','tb_user.id_user = tb_jadwal.id_user','left');
-  		$this->db->where('tb_jadwal.tgl',date("Y-m-d"));
-  		$this->db->order_by('tb_jadwal.jam_mulai','asc');
+  		//$this->db->where('tb_jadwal.tgl',date("Y-m-d"));
+  		$this->db->order_by('tb_jadwal.tgl','asc');
   		$query = $this->db->get('',$num,$offset);
         return $query->result_array();
 	}
