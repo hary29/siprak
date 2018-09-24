@@ -26,7 +26,7 @@
 																			<thead>
 																				<tr>
 																					<th >Tanggal</th>
-																					<th >Jam Mulai</th>
+											    									<th >Jam Mulai</th>
 																					<th >Jam Selesai</th>
 																					<th >Kelompok</th>
 																					<th >Judul Percobaan</th>
