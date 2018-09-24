@@ -10,6 +10,8 @@ class Eksperimen extends CI_Controller {
 		$this->load->model('M_user');
 		$this->load->model('M_mahasiswa');
 		$this->load->model('M_eksperimen');
+		$this->load->model('M_responsi');
+		$this->load->model('M_nilai_prak');
 		$this->load->model('M_atr');
 	}
 
@@ -63,6 +65,8 @@ class Eksperimen extends CI_Controller {
 
 	public function tambah() {
 		$data['kurikulum'] = $this->M_eksperimen->get_kurikulum();
+		$data['user'] = $this->M_responsi->get_user();
+		$data['asisten'] = $this->M_nilai_prak->get_user();
 
 		$this->load->view('layout/back/header',$data);
 		$this->load->view('layout/back/sidebar',$data);
@@ -91,8 +95,23 @@ class Eksperimen extends CI_Controller {
 			$cek=$this->M_eksperimen->get_cari_sama($data_eksperimen);
 			//print_r($cek);exit;
 			if ($cek==0) {
-		$this->M_eksperimen->tambah($data_eksperimen);
-		//cek aturan
+		$tambah = $this->M_eksperimen->tambah($data_eksperimen);
+		//------------insert sub----------------------------
+		$nama = $this->input->post('nama_sub_pelajaran');
+		$asisten = $this->input->post('id_user_asisten');
+		//print_r($nama);echo '<br/>';
+		$i = 0;
+		foreach($nama as $key=>$val)
+		{
+			$data[$i]['id_pelajaran'] = $tambah;
+		    $data[$i]['nama_sub_pelajaran'] = $val;
+		    $data[$i]['id_user'] = $asisten[$key];
+		    $i++;
+		}//print_r($data);echo '<br/>';
+		$insert= $this->M_eksperimen->tambah_sub($data);
+		//print_r($insert);
+		
+		//---------------cek aturan--------------------------
 			$sesi = $this->input->post('sesi');
 			//cek sesi di atr 
 			$cek_sesi = $this->M_atr->cek_atr($sesi);
@@ -116,35 +135,26 @@ class Eksperimen extends CI_Controller {
 				//tentukan batas bawah dan atas di atr1
 				 	if($i=== 3){
 				 		$awal = 0;
-				 		$awalResp = 0;
 				 		$nama = 'Rendah';
 				 		$akhir = $hasil/$i;
 				 		$akhir = $akhir-1;
-				 		$akhirResp = $totalResp/$i;
-				 		$akhirResp = $akhirResp-1;
 				 	}
 				else{
 						$bagi = $i+1;
 						$awal = $hasil/$bagi;
-						//responsi
-						$bagiResp = $i+1;
-						$awalResp = $totalResp/$bagiResp;
 				 	}
 				 	//selesksi nama
 					if($i===2){
 				 		$nama = 'Sedang';
 				 		$akhir = $hasil/$i;
 				 		$akhir = $akhir-1;
-				 		$akhirResp = $totalResp/$i;
-				 		$akhirResp = $akhirResp-1;
 				 	}
 					if($i===1){
 				 		$nama = 'Tinggi';
 						$bagi = $i+1;
 						$awal = $hasil/$bagi;
 						$akhir = $hasil/$i;
-						$awalResp = $totalResp/$bagiResp;
-						$akhirResp = $totalResp/$i;
+						
 				 	}
 
 				 	$data_atr1 = array(
@@ -157,18 +167,50 @@ class Eksperimen extends CI_Controller {
 					echo '<br/>';*/
 					$this->M_atr->tambah($data_atr1);
 					//simpan di atr 1
-					$data_atr2 = array(
+				}
+			}
+			//------------------cek sudah ada aturan2 atau belum-------------------------
+			$cek_aturan2 = $this->M_atr->cek_aturan2();
+			//jika kosong buat aturan baru
+			if(empty($cek_aturan2)){
+				for($i=1; $i<=3; $i++){
+					//print_r($i);exit;
+				//tentukan batas bawah dan atas di atr2
+				 	if($i=== 3){
+				 		$awalResp = 0;
+				 		$nama = 'Rendah';
+				 		$akhirResp = $totalResp/$i;
+				 		$akhirResp = $akhirResp-1;
+				 	}
+				else{
+						//responsi
+						$bagiResp = $i+1;
+						$awalResp = $totalResp/$bagiResp;
+				 	}
+				 	//selesksi nama
+					if($i===2){
+				 		$nama = 'Sedang';
+				 		$akhirResp = $totalResp/$i;
+				 		$akhirResp = $akhirResp-1;
+				 	}
+					if($i===1){
+				 		$nama = 'Tinggi';
+						$bagi = $i+1;
+						$awalResp = $totalResp/$bagiResp;
+						$akhirResp = $totalResp/$i;
+				 	}
+				 	$data_atr2 = array(
 					'batas_bawah' => $awalResp,
 					'batas_atas' => $akhirResp,
 					'class' => $nama,
-					'sesi' => $sesi
 					);
-					/*print_r($data_atr2);
-					echo '<br/>';*/
+					//print_r($data_atr2);
+					//echo '<br/>';
 					$this->M_atr->tambah2($data_atr2);
 					//simpan di atr2
 				}
 			}
+			
 		$this->session->set_flashdata("pesan", "<div class=\"alert alert-success\" id=\"alert\"><i class=\"glyphicon glyphicon-ok\"></i> Berhasil menambah data</div>");
 		redirect('back/eksperimen');}
 		else {
@@ -390,5 +432,14 @@ class Eksperimen extends CI_Controller {
 		$this->M_eksperimen->delete($id);
 		$this->session->set_flashdata("pesan", "<div class=\"alert alert-success\" id=\"alert\"><i class=\"glyphicon glyphicon-ok\"></i> Data berhasil dihapus</div>");
 		redirect('back/eksperimen');
+	}
+
+	public function get_input_sub(){
+		$data['id']=$this->input->post('id');
+		$data['asisten'] = $this->M_nilai_prak->get_user();
+		$tampil = $this->load->view('back/eksperimen/sub_pelajaran',$data);
+		//print_r($data);exit;
+		return $tampil;
+		//echo json_encode($data);
 	}
 }

@@ -104,9 +104,10 @@ class Home_back extends CI_Controller {
 		// $data['user']=$this->M_user->jumlah_user();
 		// $data['mhs']=$this->M_mahasiswa->jumlah_mahasiswa();
 		// $data['eksperimen']=$this->M_eksperimen->jumlah_eksperimen();
+		$id_user= $this->session->userdata('id'); 
 		$data['kelompok']=$this->M_kelompok->jumlah_kelompok();
-		$data['jadwal'] = $this->M_jadwal->daftar_jadwal2($config['per_page'], $offset);
-		$data['kel']=$this->M_kelompok->daftar_kelompok2();
+		$data['jadwal'] = $this->M_jadwal->daftar_jadwal3($config['per_page'], $offset, $id_user);
+		$data['kel']=$this->M_kelompok->daftar_kelompok3($id_user);
 	}
 
 		$this->load->view('layout/back/header');

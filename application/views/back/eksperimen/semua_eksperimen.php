@@ -40,7 +40,7 @@
 														$no = $offset;
 													foreach($data_eksperimen as $list) { ?>
 													<tr>
-														<td><?php echo ++$no ?></a></td>
+														<td><?php echo ++$no ?></td>
 														<td><?php echo $list['semester']; ?></td>
 														<td><?php echo $list['tahun']; ?></td>
 														<td><?php echo $list['nama_pelajaran']; ?></td>
@@ -64,6 +64,9 @@
                                 </table>
                             </div>
                         </div>
+                        <div align="center" class="panel-footer" style="height:40px;">
+						<?php echo $halaman ?> <!--Memanggil variable pagination-->
+					</div>
                     </div>
                 </div>
             </div>

@@ -76,6 +76,20 @@ class M_jadwal extends CI_Model {
   		$query = $this->db->get('',$num,$offset);
         return $query->result_array();
 	}
+
+	public function daftar_jadwal3($num,$offset,$id_user) {
+		$this->db->select('*');
+  		$this->db->from('tb_jadwal', 'tb_kelompok', 'tb_pelajaran', 'tb_user');
+  		$this->db->join('tb_kelompok','tb_kelompok.id_kelompok = tb_jadwal.id_kelompok','left');
+  		$this->db->join('tb_pelajaran','tb_pelajaran.id_pelajaran = tb_jadwal.id_pelajaran','left');
+  		$this->db->join('tb_user','tb_user.id_user = tb_jadwal.id_user','left');
+  		$this->db->where('tb_jadwal.tgl',date("Y-m-d"));
+  		$this->db->where('tb_user.id_user',$id_user);
+  		$this->db->order_by('tb_jadwal.jam_mulai','asc');
+  		$query = $this->db->get('',$num,$offset);
+        return $query->result_array();
+	}
+
 	public function cek_sesi($id_pelajaran)
 	{
 		$this->db->select('sesi');

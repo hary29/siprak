@@ -55,7 +55,17 @@ class Nilai_prak extends CI_Controller {
 			//tamplikan data
 			 
 			$data['offset'] = $offset;
-			$data['data_niprak'] = $this->M_nilai_prak->daftar_nilai($config['per_page'], $offset);
+			$level= $this->session->userdata('level'); 
+
+			if($level==1)
+			{
+				$data['data_niprak'] = $this->M_nilai_prak->daftar_nilai($config['per_page'], $offset);
+			}
+			if($level==4)
+			{
+				$id_user= $this->session->userdata('id'); 
+				$data['data_niprak'] = $this->M_nilai_prak->daftar_nilai1($config['per_page'], $offset, $id_user);
+			}
 
 			//print_r($data);exit;
 			$this->load->view('layout/back/header');
@@ -68,8 +78,17 @@ class Nilai_prak extends CI_Controller {
 		
 		$data['user'] = $this->M_nilai_prak->get_user();
 		$data['mhs'] = $this->M_nilai_prak->get_mahasiswa();
-		$data['pel'] = $this->M_nilai_prak->get_pelajaran();
-
+		
+		$level= $this->session->userdata('level'); 
+		if($level==1)
+		{
+			$data['pel'] = $this->M_nilai_prak->get_pelajaran();
+		}
+		if($level==4)
+		{
+			$id_user= $this->session->userdata('id'); 
+			$data['pel'] = $this->M_nilai_prak->get_pelajaran2($id_user);
+		}
 
 		$this->load->view('layout/back/header',$data);
 		$this->load->view('layout/back/sidebar',$data);
@@ -88,10 +107,24 @@ class Nilai_prak extends CI_Controller {
 		$id = isset($_GET['id'])?$_GET['id'] : '';
 		}
 		//print_r($id);exit;
+		$level= $this->session->userdata('level'); 
+
+		if($level==1)
+		{
+			$data['prak']=$this->M_eksperimen->cari_eksperimen($id);
+			$data['user'] = $this->M_nilai_prak->get_user();
+			$data['sub'] = $this->M_eksperimen->get_sub($id);
+			$data['pelajaran'] = $id;
+		}
+		if($level==4)
+		{
+			$id_user= $this->session->userdata('id'); 
+			$data['prak']=$this->M_eksperimen->cari_eksperimen1($id,$id_user);
+			$data['user'] = $this->M_nilai_prak->get_user();
+			$data['sub'] = $this->M_eksperimen->get_sub($id);
+			$data['pelajaran'] = $id;
+		}
 		
-		$data['prak']=$this->M_eksperimen->cari_eksperimen($id);
-		$data['user'] = $this->M_nilai_prak->get_user();
-		$data['pelajaran'] = $id;
 		//print_r($data['prak']);exit;
 		$this->load->view('layout/back/header',$data);
 		$this->load->view('layout/back/sidebar',$data);
@@ -103,7 +136,7 @@ class Nilai_prak extends CI_Controller {
 		//print_r($_POST);exit;
 		$data_nilai_prak = array(
 			'id_nilai_prak' => $this->input->post('id_nilai_prak'),
-			'pertemuan' => $this->input->post('pertemuan'),
+			'id_sub' => $this->input->post('id_sub'),
 			'id_pelajaran' => $this->input->post('id_pelajaran'),
 			'pretest' => $this->input->post('pretest'),
 			'laporan' => $this->input->post('laporan'),
@@ -174,24 +207,26 @@ class Nilai_prak extends CI_Controller {
 							$responsi = 0;
 							$id_responsi = '';
 							$id_atr_prem2 = '';
-							$class_prem2 = '';
+							$class_prem2 = '-';
 						}else{
 							foreach ($cek_responsi as $key) {
 								//cek responsi jika kosong maka ubah ke 0
-								$responsi = isset($key->nilai_responsi)? $key->nilai_responsi : '0';
-								$id_responsi = isset($key->id_responsi)? $key->id_responsi : '';
-								$id_atr_prem2 = isset($key->id_atr_perm2)? $key->id_atr_perm2 : '';
-								$class_prem2 = isset($key->class)? $key->class : '';
+								$responsi = $key->nilai_responsi;
+								$id_responsi = $key->id_responsi;
+								$id_atr_prem2 = $key->id_atr_perm2;
+								$class_prem2 = $key->class;
 							}
 						}
 
 						 $nilai_final = ($nilai_akhir+$responsi)/2;
 						 //cari class dari nilai final
+						 //print_r($class_prem1); print_r($class_prem2);
 						 $atr_final = $this->M_atr->cek_aturan_final($class_prem1,$class_prem2);
-						 foreach ($atr_final as $key => $value_final) {
-						 	$id_aturan = isset($key->id_aturan)? $key->id_aturan : '';
+						 //print_r($atr_final);//exit;
+						 foreach ($atr_final as $value_final) {
+						 	$id_aturan = $value_final->id_aturan;
 						 }
-						 //print_r($responsi);exit;
+						 //print_r($id_aturan);exit;
 						//print_r($cek_hasil_akhir);exit;
 							//jika cek nilai kosong maka buat baru
 							$cek_hasil_akhir =$this->M_hasil_akhir->cek_hasil_akhir($data_eksperimen,$data_mhs);
@@ -248,22 +283,23 @@ class Nilai_prak extends CI_Controller {
 							$responsi = 0;
 							$id_responsi = '';
 							$id_atr_prem2 = '';
-							$class_prem2 = '';
+							$class_prem2 = '-';
 						}else{
 							foreach ($cek_responsi as $key) {
 								//cek responsi jika kosong maka ubah ke 0
-								$responsi = isset($key->nilai_responsi)? $key->nilai_responsi : '0';
-								$id_responsi = isset($key->id_responsi)? $key->id_responsi : '';
-								$id_atr_prem2 = isset($key->id_atr_prem2)? $key->id_atr_prem2 : '';
-								$class_prem2 = isset($key->class)? $key->class : '';
+								$responsi = $key->nilai_responsi;
+								$id_responsi =  $key->id_responsi;
+								$id_atr_prem2 = $key->id_atr_prem2;
+								$class_prem2 = $key->class;
 							}
 						}
 
 						 $nilai_final = ($nilai_akhir+$responsi)/2;
 						 //cari class dari nilai final
-						 $atr_final = $this->M_atr->cek_aturan_final($class_prem1,$class_prem2);
+						 //print_r($class_prem1); print_r($class_prem2);
+						 $atr_final = $this->M_atr->cek_aturan_final($class_prem1,$class_prem2);//print_r($atr_final);exit;
 						 foreach ($atr_final as $key => $value_final) {
-						 	$id_aturan = isset($key->id_aturan)? $key->id_aturan : '';
+						 	$id_aturan = $value_final->id_aturan;
 						 }
 						 //print_r($responsi);exit;
 						//print_r($cek_hasil_akhir);exit;
@@ -318,6 +354,7 @@ class Nilai_prak extends CI_Controller {
          $data['user'] = $this->M_kelompok->get_user();
          $data['mhs'] = $this->M_nilai_prak->get_mahasiswa();
          $data['pel'] = $this->M_nilai_prak->get_pelajaran();
+         $data['sub'] = $this->M_eksperimen->get_sub_list();
 
         $this->load->view('layout/back/header');
 		$this->load->view('layout/back/sidebar');
@@ -333,7 +370,7 @@ class Nilai_prak extends CI_Controller {
         if($level==1)
         {
 	        $this->form_validation->set_rules('id_nilai_prak','id_nilai_prak','required');
-			$this->form_validation->set_rules('pertemuan','pertemuan','required');
+			$this->form_validation->set_rules('id_sub','id_sub','required');
 			$this->form_validation->set_rules('id_pelajaran','id_pelajaran','required');
 			$this->form_validation->set_rules('pretest','pretest','required');
 			$this->form_validation->set_rules('laporan','laporan','required');
@@ -347,7 +384,7 @@ class Nilai_prak extends CI_Controller {
 		else{
 				$data_nilai_prak = array(
 					'id_nilai_prak' => $this->input->post('id_nilai_prak'),
-					'pertemuan' => $this->input->post('pertemuan'),
+					'id_sub' => $this->input->post('id_sub'),
 					'id_pelajaran' => $this->input->post('id_pelajaran'),
 					'pretest' => $this->input->post('pretest'),
 					'laporan' => $this->input->post('laporan'),
@@ -366,6 +403,7 @@ class Nilai_prak extends CI_Controller {
 					$laporan = $key->laporan;
 				}
 				//cari nilai akhir
+				$cari_sesi=$this->M_eksperimen->get_cari_sesi($data_eksperimen);
 				$sesi = $cari_sesi->sesi;
 				$nilai_akhir = ($pretest+$laporan)/$sesi;
 				//print_r($nilai_akhir);exit;
@@ -382,7 +420,7 @@ class Nilai_prak extends CI_Controller {
 					'nim' => $this->input->post('nim'),
 					'id_user' => $this->input->post('id_user'),
 					'nilai' => $nilai_akhir,
-					'id_perm1' =>$id_prem1
+					'id_atr_perm1' =>$id_prem1
 					);
 			//jika cek nilai kosong maka buat baru
 				if (empty($cek_nilai)){
@@ -462,7 +500,7 @@ class Nilai_prak extends CI_Controller {
 					'nilai' => $nilai_akhir,
 					'id_prak_akhir' => $id,
 					'nilai' => $nilai_akhir,
-					'id_perm1' =>$id_prem1
+					'id_atr_perm1' =>$id_prem1
 					);
 					$this->M_nilai_prak->edit_akhir($data_nilai_prak);
 											$cek_hasil_akhir =$this->M_hasil_akhir->cek_hasil_akhir($data_eksperimen,$data_mhs);
@@ -543,7 +581,7 @@ class Nilai_prak extends CI_Controller {
 			$id= $this->session->userdata('id'); 
 			$data_nilai_prak = array(
 				'id_nilai_prak' => $this->input->post('id_nilai_prak'),
-				'pertemuan' => $this->input->post('pertemuan'),
+				'id_sub' => $this->input->post('id_sub'),
 				'id_pelajaran' => $this->input->post('id_pelajaran'),
 				'pretest' => $this->input->post('pretest'),
 				'laporan' => $this->input->post('laporan'),

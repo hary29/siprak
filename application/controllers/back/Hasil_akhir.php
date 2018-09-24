@@ -62,7 +62,7 @@ class Hasil_akhir extends CI_Controller {
 			$id = $this->input->post('id_pelajaran');
 			$data['offset'] = $offset;
 			$data['hasil'] = $this->M_hasil_akhir->daftar_nilai($config['per_page'], $offset,$id);
-
+//print_r($data['hasil']);exit;
 			//print_r($data);exit;
 			$this->load->view('layout/back/header');
 			$this->load->view('layout/back/sidebar');

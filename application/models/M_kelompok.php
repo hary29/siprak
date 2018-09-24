@@ -69,6 +69,17 @@ class M_kelompok extends CI_Model {
         return $query->result_array();
 	}
 
+	public function daftar_kelompok3($id_user) {
+		$this->db->select('*');
+  		$this->db->from('tb_kelompok','tb_user','tb_mahasiswa');
+  		$this->db->join('tb_user','tb_kelompok.id_user = tb_user.id_user','left');
+  		$this->db->join('tb_mahasiswa','tb_kelompok.id_kelompok = tb_mahasiswa.id_kelompok','right');
+  		$this->db->where('tb_user.id_user', $id_user);
+  		$this->db->order_by('nim','asc');
+  		$query = $this->db->get('');
+        return $query->result_array();
+	}
+
 	public function get_cari_sama($data_kelompok) 
 	{
    		$this->db->select('*');

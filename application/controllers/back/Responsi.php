@@ -54,7 +54,17 @@ class Responsi extends CI_Controller {
 			//tamplikan data
 			 
 			$data['offset'] = $offset;
-			$data['data_responsi'] = $this->M_responsi->daftar_responsi($config['per_page'], $offset);
+			
+			$level= $this->session->userdata('level'); 
+			if($level==1)
+			{
+				$data['data_responsi'] = $this->M_responsi->daftar_responsi($config['per_page'], $offset);
+			}
+			if($level==2)
+			{
+				$id_user= $this->session->userdata('id'); 
+				$data['data_responsi'] = $this->M_responsi->daftar_responsi1($config['per_page'], $offset,$id_user);
+			}
 
 			//print_r($data);exit;
 			$this->load->view('layout/back/header');
@@ -64,7 +74,16 @@ class Responsi extends CI_Controller {
 	}
 
 	public function tambah() {
-		$data['pel'] = $this->M_nilai_prak->get_pelajaran();
+		$level= $this->session->userdata('level'); 
+		if($level==1)
+		{
+			$data['pel'] = $this->M_nilai_prak->get_pelajaran();
+		}
+		if($level==2)
+		{
+			$id_user= $this->session->userdata('id'); 
+			$data['pel'] = $this->M_nilai_prak->get_pelajaran1($id_user);
+		}
 
 		$this->load->view('layout/back/header',$data);
 		$this->load->view('layout/back/sidebar',$data);
@@ -73,7 +92,7 @@ class Responsi extends CI_Controller {
 	
 	}
 	public function pilih_experimen(){
-
+		
 		$id = $this->input->post('id_pelajaran');
 		$data['responsi']=$this->M_eksperimen->cari_eksperimen($id);
 		$data['user'] = $this->M_responsi->get_user();
@@ -90,13 +109,12 @@ class Responsi extends CI_Controller {
 	public function tambah_aksi(){
 
 		$data_eksperimen = $this->input->post('id_pelajaran');
-		$cari_sesi=$this->M_eksperimen->get_cari_sesi($data_eksperimen);
-		$sesi = $cari_sesi->sesi;
+		
 		$responsi = $this->input->post('nilai_responsi');
 				//print_r($nilai_akhir);exit;
 				//$sesi = $cari_sesi->sesi;
 				//cari class dan id aturan prem1
-		$clustering = $this->M_atr->cek_aturan_perm2($responsi,$sesi);
+		$clustering = $this->M_atr->cek_aturan_perm2($responsi);
 		foreach ($clustering as $key => $value) {
 			$class = $value->class;
 			$id_prem2 = $value->id_atr_perm2;
@@ -130,14 +148,14 @@ class Responsi extends CI_Controller {
 			$nilai_akhir = 0;
 			$id_prak_akhir = '';
 			$id_atr_perm1 = '';
-			$class_prem1 = '';
+			$class_prem1 = '-';
 		}else{
 			foreach ($cek_prak as $key) {
 				//cek nilai prak jika kosong maka ubah ke 0
 				$nilai_akhir = isset($key->nilai)? $key->nilai: '0';
 				$id_prak_akhir = isset($key->id_prak_akhir)? $key->id_prak_akhir : '';
 				$id_atr_perm1 = isset($key->id_atr_perm1)? $key->id_atr_perm1 : '';
-				$class_prem1 = isset($key->class)? $key->class : '';
+				$class_prem1 = isset($key->class)? $key->class : '-';
 			}
 		}
 
@@ -225,13 +243,12 @@ class Responsi extends CI_Controller {
 		}else{
 
 	$data_eksperimen = $this->input->post('id_pelajaran');
-		$cari_sesi=$this->M_eksperimen->get_cari_sesi($data_eksperimen);
-		$sesi = $cari_sesi->sesi;
+		
 		$responsi = $this->input->post('nilai_responsi');
 				//print_r($nilai_akhir);exit;
 				//$sesi = $cari_sesi->sesi;
 				//cari class dan id aturan prem1
-		$clustering = $this->M_atr->cek_aturan_perm2($responsi,$sesi);
+		$clustering = $this->M_atr->cek_aturan_perm2($responsi);
 		foreach ($clustering as $key => $value) {
 			$class = $value->class;
 			$id_prem2 = $value->id_atr_perm2;

@@ -25,6 +25,18 @@ class M_responsi extends CI_Model {
         return $query->result_array();
 	}
 
+	public function daftar_responsi1($num,$offset,$id_user) {
+		$this->db->select('*');
+  		$this->db->from('tb_responsi','tb_user','tb_mahasiswa','tb_kurikulum');
+  		$this->db->join('tb_user','tb_responsi.id_user = tb_user.id_user','left');
+  		$this->db->join('tb_mahasiswa','tb_responsi.nim = tb_mahasiswa.nim','left');
+  		$this->db->join('tb_kurikulum','tb_responsi.id_kurikulum = tb_kurikulum.id_kurikulum','left');
+  		$this->db->where('tb_user.id_user', $id_user);
+  		$this->db->order_by('id_responsi','asc');
+  		$query = $this->db->get('',$num,$offset);
+        return $query->result_array();
+	}
+
 	// Model untuk menambah data kelompok
 	public function tambah($data_responsi) {
 		$this->db->insert('tb_responsi', $data_responsi);

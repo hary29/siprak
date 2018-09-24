@@ -42,7 +42,7 @@
 														//$no = $offset;
 													foreach($nilai as $list) { ?>
 													<tr>
-														<td><?php echo $list['pertemuan']; ?></td>
+														<td><?php echo $list['nama_sub_pelajaran']; ?></td>
 														<td><?php echo $list['pretest']; ?></td>
 														<td><?php echo $list['laporan']; ?></td>
 													</tr>

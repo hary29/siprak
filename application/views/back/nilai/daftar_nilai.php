@@ -30,8 +30,8 @@
 																					<th >NIM</th>
 																					<th >Nama Mahasiswa</th>
 																					<th >Nama Experimen</th>
+																					<th >Nilai Responsi</th>
 																					<th >Nilai Praktikum</th>
-																					<th >Nilai responsi</th>
 																					<th >nilai Akhir</th>
 																					<th >Hasil</th>
 																					<th >Nama</th>
@@ -49,8 +49,8 @@
 														<td><?php echo $list['nama_mhs']; ?></td>
 														<td><?php echo $list['nama_pelajaran']; ?></td>
 														<td><?php echo $list['nilai_responsi']; ?></td>
-														<td><?php echo $list['nilai_akhir']; ?></td>
 														<td><?php echo $list['nilai']; ?></td>
+														<td><?php echo $list['nilai_akhir']; ?></td>
 														<td><?php echo $list['hasil']; ?></td>
 														<td><?php echo $list['nama']; ?></td>
 														<?php } ?>

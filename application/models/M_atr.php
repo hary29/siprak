@@ -7,9 +7,16 @@ class M_atr extends CI_Model {
 	public function cek_atr($sesi)
 	{
 		$this->db->select('*');
-		$this->db->from('tb_atr_perm1, tb_atr_perm2');
+		$this->db->from('tb_atr_perm1');
       	$this->db->where('tb_atr_perm1.sesi', $sesi);
-      	$this->db->where('tb_atr_perm2.sesi', $sesi);
+      	$query = $this->db->get('');
+    	return $query->num_rows();
+	}
+
+	public function cek_aturan2()
+	{
+		$this->db->select('*');
+		$this->db->from('tb_atr_perm2');
       	$query = $this->db->get('');
     	return $query->num_rows();
 	}
@@ -42,10 +49,9 @@ class M_atr extends CI_Model {
     	return $query->result();
 	}
 
-	public function cek_aturan_perm2($responsi,$sesi) 
+	public function cek_aturan_perm2($responsi) 
 	{
    		$this->db->select('*');
-   		$this->db->where('sesi', $sesi);
       	$this->db->where('batas_bawah <=', $responsi);
 		$this->db->where('batas_atas >=', $responsi);
       	$query = $this->db->get('tb_atr_perm2');

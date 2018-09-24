@@ -16,10 +16,24 @@ class M_nilai_prak extends CI_Model {
 	// Menampilkan data kelompok
 	public function daftar_nilai($num,$offset) {
 		$this->db->select('*');
-  		$this->db->from('tb_nilai_prak','tb_user','tb_mahasiswa','tb_pelajaran');
+  		$this->db->from('tb_nilai_prak','tb_user','tb_mahasiswa','tb_pelajaran','tb_sub_pelajaran');
   		$this->db->join('tb_user','tb_nilai_prak.id_user = tb_user.id_user','left');
   		$this->db->join('tb_mahasiswa','tb_nilai_prak.nim = tb_mahasiswa.nim','left');
   		$this->db->join('tb_pelajaran','tb_nilai_prak.id_pelajaran = tb_pelajaran.id_pelajaran','left');
+  		$this->db->join('tb_sub_pelajaran','tb_nilai_prak.id_sub = tb_sub_pelajaran.id_sub','left');
+  		$this->db->order_by('id_nilai_prak','asc');
+  		$query = $this->db->get('',$num,$offset);
+        return $query->result_array();
+	}
+
+	public function daftar_nilai1($num,$offset,$id_user) {
+		$this->db->select('*');
+  		$this->db->from('tb_nilai_prak','tb_user','tb_mahasiswa','tb_pelajaran','tb_sub_pelajaran');
+  		$this->db->join('tb_user','tb_nilai_prak.id_user = tb_user.id_user','left');
+  		$this->db->join('tb_mahasiswa','tb_nilai_prak.nim = tb_mahasiswa.nim','left');
+  		$this->db->join('tb_pelajaran','tb_nilai_prak.id_pelajaran = tb_pelajaran.id_pelajaran','left');
+  		$this->db->join('tb_sub_pelajaran','tb_nilai_prak.id_sub = tb_sub_pelajaran.id_sub','left');
+  		$this->db->where('tb_user.id_user', $id_user);
   		$this->db->order_by('id_nilai_prak','asc');
   		$query = $this->db->get('',$num,$offset);
         return $query->result_array();
@@ -73,11 +87,25 @@ class M_nilai_prak extends CI_Model {
    		$query = $this->db->get('tb_pelajaran');
 		return $query->result_array();
 	}
+	public function get_pelajaran2($id_user) {
+		$this->db->select('*');
+		$this->db->from('tb_sub_pelajaran','tb_pelajaran');
+  		$this->db->join('tb_pelajaran','tb_sub_pelajaran.id_pelajaran = tb_pelajaran.id_pelajaran','left');
+      	$this->db->where('tb_sub_pelajaran.id_user', $id_user);
+   		$query = $this->db->get('');
+		return $query->result_array();
+	}
+	public function get_pelajaran1($id_user) {
+		$this->db->select('*');
+    	$this->db->where('id_user', $id_user);
+   		$query = $this->db->get('tb_pelajaran');
+		return $query->result_array();
+	}
 
 	public function get_cari_sama($data_nilai_prak) 
 	{
    		$this->db->select('*');
-      	$this->db->where('pertemuan', $data_nilai_prak['pertemuan']);
+      	$this->db->where('id_sub', $data_nilai_prak['id_sub']);
       	$this->db->where('id_pelajaran', $data_nilai_prak['id_pelajaran']);
       	$this->db->where('nim', $data_nilai_prak['nim']);
       	$query = $this->db->get('tb_nilai_prak');
@@ -85,9 +113,10 @@ class M_nilai_prak extends CI_Model {
 	}
 	public function get_nilai($nim,$idp){
 		$this->db->select('*');
-		$this->db->from('tb_nilai_prak','tb_pelajaran','tb_mahasiswa');
+		$this->db->from('tb_nilai_prak','tb_pelajaran','tb_mahasiswa','tb_sub_pelajaran');
   		$this->db->join('tb_mahasiswa','tb_nilai_prak.nim = tb_mahasiswa.nim','left');
   		$this->db->join('tb_pelajaran','tb_nilai_prak.id_pelajaran = tb_pelajaran.id_pelajaran','left');
+  		$this->db->join('tb_sub_pelajaran','tb_nilai_prak.id_pelajaran = tb_sub_pelajaran.id_pelajaran','left');
       	$this->db->where('tb_nilai_prak.nim', $nim);
       	$this->db->where('tb_nilai_prak.id_pelajaran', $idp);
       	$query = $this->db->get('');

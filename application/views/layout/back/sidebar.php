@@ -28,6 +28,11 @@ if($level==1){?>
                     </li>
 
                     <li class="nav-small-cap m-t-10">--- Manage</li>
+                     <li> <a href="javascript:void(0);" class="waves-effect"><i class="ti-pulse p-r-10"></i> <span class="hide-menu"> Data Nilai Akhir<span class="fa arrow"></span></span></a>
+                        <ul class="nav nav-second-level">
+                            <li> <a href="<?php echo base_url() ?>back/hasil_akhir">Semua Nilai </a> </li>
+                        </ul>
+                    </li>
                     <li> <a href="javascript:void(0);" class="waves-effect"><i class="ti-calendar p-r-10"></i> <span class="hide-menu"> Aturan <span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
                             <li> <a href="<?php echo base_url() ?>back/aturan/praktikum">Aturan Nilai Praktikum</a> </li>
@@ -65,6 +70,7 @@ if($level==1){?>
                      <li> <a href="javascript:void(0);" class="waves-effect"><i class=" ti-shopping-cart-full p-r-10"></i> <span class="hide-menu">Data Eksperimen<span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">
                             <li> <a href="<?php echo base_url() ?>back/eksperimen">Semua Data Eksperimen</a></li>
+                            <li> <a href="<?php echo base_url() ?>back/sub_eksperimen">Semua Data Sub Eksperimen</a></li>
                             <li> <a href="<?php echo base_url() ?>back/eksperimen/tambah">Tambah Data Eksperimen</a></li>
                             <!-- <li> <a href="sales-report.html">Sales Report</a></li> -->
                         </ul>

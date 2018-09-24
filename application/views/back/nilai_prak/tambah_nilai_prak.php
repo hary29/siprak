@@ -45,12 +45,11 @@
                                   	$sesi = $m['sesi'];
                                 }?>
                               <div class="form-group">
-                              <label for="gejala" class="col-sm-4">Pertemuan</label>
+                              <label for="sub" class="col-sm-4">Sub Pelajaran</label>
                               <div class="col-sm-10">
-                                  <select name="pertemuan" id="pertemuan" class="form-control">
-                                  <?php
-                                 	for ($i=1; $i <= $sesi ; $i++) { ?>
-                                  <option value="<?php echo $i?>"><?php echo $i?></option>
+                                  <select name="id_sub" id="id_sub" class="form-control">
+                                  <?php foreach($sub as $m) { ?>
+                                  <option value="<?php echo $m['id_sub']?>"><?php echo $m['nama_sub_pelajaran']?></option>
                                   <?php } ?>
                                   </select>
                               </div>
@@ -100,7 +99,7 @@
                               <label for="gejala" class="col-sm-4">Nama Asisten</label>
                               <div class="col-sm-10">
                                   <select name="id_user" id="" class="form-control">
-                                  <option>--Pilih Asisten--</option>
+                                  <option value="">--Pilih Asisten--</option>
                                   <?php foreach($user as $ass) { ?>
                                   <option value="<?php echo $ass['id_user']?>"><?php echo $ass['nama']?></option>
                                   <?php } ?>
@@ -126,7 +125,6 @@
                </div>
 <?php //print_r($idp);?>
 <script src="<?php echo base_url(); ?>asset/js/jquery-2.2.3.min.js"></script>
- <script type="text/javascript" src="<?php echo base_url(); ?>asset/js/jquery.chained.min.js"></script>
  <link rel="stylesheet" href="<?php echo base_url() ?>asset/back/hiden-form/style.css" />
     <script src="<?php echo base_url() ?>asset/back/hiden-form/jquery.js"></script>
 <script type="text/javascript">
