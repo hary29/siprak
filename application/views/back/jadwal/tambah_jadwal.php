@@ -62,8 +62,10 @@
                               <label for="gejala" class="col-sm-4">Kelompok</label>
                               <div class="col-sm-4">
                                   <select name="id_kelompok" id="id_kelompok" class="id_kelompok form-control">
+                                  <?php foreach($kelompok as $ass) { ?>
                                   <option>--Pilih Kelompok--</option>
-                                  
+                                  <option value="<?php echo $ass->id_kelompok?>"><?php echo $ass->nm_kelompok?></option>
+                                  <?php } ?>
                                   </select>
                               </div>
                               </div>

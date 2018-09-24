@@ -13,9 +13,7 @@
 				<div class="col-xs-8 text-right menu-1">
 					<ul>
 						<li class="btn-cta"><a href="<?php echo base_url() ?>welcome"><span>Home</span></a></li>
-						<li><a href="<?php echo base_url() ?>front/feature">Features</a></li>
-						<li><a href="<?php echo base_url() ?>front/pricing">Pricing</a></li>
-						<li><a href="<?php echo base_url() ?>front/contact">Contact</a></li>
+						<li><a href="<?php echo base_url() ?>front/jadwal">Jadwal</a></li>
 					</ul>
 				</div>
 			</div>
