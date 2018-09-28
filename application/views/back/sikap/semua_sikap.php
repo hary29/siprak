@@ -2,12 +2,12 @@
 						<div class="container-fluid">
 								<div class="row bg-title">
 										<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-												<h4 class="page-title">Data Aturan Praktikum</h4> </div>
+												<h4 class="page-title">Data Nilai Responsi</h4> </div>
 										<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12"> <a href="" class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Refresh</a>
 												<ol class="breadcrumb">
-														
-														<li><a href="<?php echo base_url() ?>back/nilai_prak/semua_nilai_prak">Nilai Praktikum</a></li>
-														<li class="active">Data Aturan Praktikum</li>
+														<li><a href="<?php echo base_url() ?>front/Log/logout">Hospital</a></li>
+														<li><a href="<?php echo base_url() ?>back/responsi/semua_responsi">Nilai Responsi</a></li>
+														<li class="active">Data Nilai Responsi</li>
 												</ol>
 										</div>
 										<!-- /.col-lg-12 -->
@@ -26,25 +26,30 @@
 																<table id="myTable" class="table table-striped">
 																			<thead>
 																				<tr>
-																					<th >No</th>
-																					<th >Praktikum</th>
-																					<th >Responsi</th>
-																					<th >Sikap</th>
-																					<th >Hasil</th>
+																					<th >NIM</th>
+																					<th >Nama</th>
+																					<th >Pelajaran</th>
+																					<th >Nilai Sikap</th>
+																					<th >Aksi</th>
 																				</tr>
 																			</thead>
 																			<tbody>
 																				<tr class="odd gradeX">
 																					<?php 
 														$no = $offset;
-													foreach($hasil as $list) { ?>
+													foreach($data_sikap as $list) { ?>
 													<tr>
-														<td><?php echo ++$no ?></td>
-														<td><?php echo isset($list['permis1'])?$list['permis1']:'-'; ?></td>
-														<td><?php echo isset($list['permis2'])?$list['permis2']:'-'; ?></td>
-														<td><?php echo isset($list['permis3'])?$list['permis3']:'-'; ?></td>
-														<td><?php echo $list['hasil']; ?></td>
-														<?php } ?>
+														<td><?php echo $list['nim']; ?></td>
+														<td><?php echo $list['nama_mhs']; ?></td>
+														<td><?php echo $list['nama_pelajaran']; ?></td>
+														<td><?php echo $list['sikap']; ?></td>
+														<td>
+
+														<a href="<?php echo base_url() ?>back/sikap/edit/<?php echo $list['id_sikap'] ?>"> <label class="btn btn-info" >EDIT</a> &nbsp 
+                            <?php
+                        //$level=$this->session->userdata('level');
+                        // if($level == 1){?>
+                            <a href="<?php echo base_url() ?>back/sikap/delete/<?php echo $list['id_sikap'] ?>"onclick="return confirm ('Apakah Anda yakin akan menghapus data ini ?')"><label class="btn btn-danger" >DELETE</a><?php } ?></td></label></a></label></a></td></tr>
                           </tr>
 
                           <?php echo $this->session->flashdata('pesan'); ?>
@@ -57,9 +62,6 @@
                                 </table>
                             </div>
                         </div>
-                         <div align="center" class="panel-footer" style="height:40px;">
-                			<?php echo $halaman ?> <!--Memanggil variable pagination-->
-                 		</div>
                     </div>
                 </div>
             </div>

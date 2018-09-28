@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Responsi extends CI_Controller {
+class Sikap extends CI_Controller {
 	public function __construct()	{
 		parent::__construct();
 		$this->load->library('session');
@@ -12,16 +12,16 @@ class Responsi extends CI_Controller {
 		$this->load->model('M_nilai_prak');
 		$this->load->model('M_eksperimen');
 		$this->load->model('M_hasil_akhir');
-		$this->load->model('M_atr');
 		$this->load->model('M_sikap');
+		$this->load->model('M_atr');
 	}
 
 	public function index($offset=0)
 	{
-		$jml = $this->db->get('tb_responsi');
+		$jml = $this->db->get('tb_sikap');
 
 			//pengaturan pagination
-			 $config['base_url'] = base_url().'back/responsi/index';
+			 $config['base_url'] = base_url().'back/sikap/index';
 			 $config['total_rows'] = $jml->num_rows();
 			 $config['per_page'] = '5';
 			 $config['first_page'] = 'Awal';
@@ -56,39 +56,21 @@ class Responsi extends CI_Controller {
 			 
 			$data['offset'] = $offset;
 			
-			$level= $this->session->userdata('level'); 
-			if($level==1)
-			{
-				$data['data_responsi'] = $this->M_responsi->daftar_responsi($config['per_page'], $offset);
-			}
-			if($level==2)
-			{
-				$id_user= $this->session->userdata('id'); 
-				$data['data_responsi'] = $this->M_responsi->daftar_responsi1($config['per_page'], $offset,$id_user);
-			}
+			$data['data_sikap'] = $this->M_sikap->daftar_nilai_sikap($config['per_page'], $offset);
 
 			//print_r($data);exit;
 			$this->load->view('layout/back/header');
 			$this->load->view('layout/back/sidebar');
-			$this->load->view('back/responsi/semua_responsi',$data);
+			$this->load->view('back/sikap/semua_sikap',$data);
 			$this->load->view('layout/back/footer');
 	}
 
 	public function tambah() {
-		$level= $this->session->userdata('level'); 
-		if($level==1)
-		{
-			$data['pel'] = $this->M_nilai_prak->get_pelajaran();
-		}
-		if($level==2)
-		{
-			$id_user= $this->session->userdata('id'); 
-			$data['pel'] = $this->M_nilai_prak->get_pelajaran1($id_user);
-		}
 
+		$data['pel'] = $this->M_sikap->get_pelajaran();
 		$this->load->view('layout/back/header',$data);
 		$this->load->view('layout/back/sidebar',$data);
-		$this->load->view('back/responsi/pilih_experimen',$data);
+		$this->load->view('back/sikap/pilih_experimen',$data);
 		$this->load->view('layout/back/footer',$data);
 	
 	}
@@ -96,55 +78,42 @@ class Responsi extends CI_Controller {
 		
 		$id = $this->input->post('id_pelajaran');
 		$data['responsi']=$this->M_eksperimen->cari_eksperimen($id);
-		$data['user'] = $this->M_responsi->get_user();
-		$data['kurikulum'] = $this->M_eksperimen->get_kurikulum();
+		$data['user'] = $this->M_user->get_user();
 		$data['pelajaran'] = $id;
 		//print_r($data['prak']);exit;
-		$this->load->view('layout/back/header',$data);
-		$this->load->view('layout/back/sidebar',$data);
-		$this->load->view('back/responsi/tambah_responsi',$data);
-		$this->load->view('layout/back/footer',$data);
+		$this->load->view('layout/back/header');
+		$this->load->view('layout/back/sidebar');
+		$this->load->view('back/sikap/tambah_sikap',$data);
+		$this->load->view('layout/back/footer');
 
 	}
 
 	public function tambah_aksi(){
-
-		$data_eksperimen = $this->input->post('id_pelajaran');//print_r($data_eksperimen);exit;
-		
-		$responsi = $this->input->post('nilai_responsi');
-				//print_r($nilai_akhir);exit;
+		$id= $this->session->userdata('id'); 
+		if($id == 3) {
+		$data_eksperimen= $this->input->post('id_pelajaran');
+		$iduser = $this->session->userdata('id'); 
+		$data_mhs = $this->input->post('nim');
+		$sikap = $this->input->post('sikap');
+				/*print_r($data_eksperimen);
+				print_r($data_mhs);*/
 				//$sesi = $cari_sesi->sesi;
 				//cari class dan id aturan prem1
-		$clustering = $this->M_atr->cek_aturan_perm2($responsi);
-		foreach ($clustering as $key => $value) {
-			$class_prem2 = $value->class;
-			$id_prem2 = $value->id_atr_perm2;
-		}
+		$cek_sikap = $this->M_sikap->cek_sikap($data_eksperimen,$data_mhs);
+		//print_r($cek_sikap);exit;
 
-		$data_responsi = array(
-			'id_responsi' => $this->input->post('id_responsi'),
-			'id_pelajaran' => $this->input->post('id_pelajaran'),
-			'nilai_responsi' => $this->input->post('nilai_responsi'),
+		$data_sikap = array(
+			'sikap' => $this->input->post('sikap'),
 			'nim' => $this->input->post('nim'),
-			//'id_atr_perm2' => $this->input->post('id_atr_perm2'),
-			'id_kurikulum' => $this->input->post('id_kurikulum'),
-			'id_user' => $this->input->post('id_user'),
-			'id_atr_perm2' => $id_prem2
+			'id_pelajaran' => $this->input->post('id_pelajaran'),
+			'id_user' => $iduser
 			);
-		
-			//print_r($data_bobot);exit;
-			//cek kesamaan data jika sama maka tidak di simpan
-			$cek=$this->M_responsi->get_cari_sama($data_responsi);
 
-			$data_eksperimen = $this->input->post('id_pelajaran');
-			$data_mhs = $this->input->post('nim');
-			//print_r($cek);exit;
-			if ($cek==0) {
-		$resp = $this->M_responsi->tambah($data_responsi);
+			if ($cek_sikap==0) {
+		$idsikap = $this->M_sikap->tambah($data_sikap);
 
 		//get nilai akhir
 		$cek_prak = $this->M_nilai_prak->cek_nilai_prak($data_eksperimen,$data_mhs);
-		//print_r($cek_responsi);exit;
 		if($cek_prak == null){
 			$nilai_akhir = 0;
 			$id_prak_akhir = '';
@@ -160,30 +129,36 @@ class Responsi extends CI_Controller {
 			}
 		}
 
-		$cek_sikap = $this->M_sikap->cek_nilai_sikap($data_eksperimen,$data_mhs);
+		$cek_responsi = $this->M_responsi->cek_nilai_responsi($data_eksperimen,$data_mhs);
 		//print_r($cek_responsi);exit;
-		if($cek_sikap == null){
-			$sikap = '-';
-			$id_sikap = '';
+		if($cek_responsi == null){
+			$responsi = 0;
+			$id_responsi = '';
+			$id_atr_prem2 = '';
+			$class_prem2 = '-';
 		}else{
-			foreach ($cek_sikap as $key) {
+			foreach ($cek_responsi as $key) {
 				//cek responsi jika kosong maka ubah ke 0
-				$sikap = $key->sikap;
-				$id_sikap = $key->id_sikap;
+				$responsi = $key->nilai_responsi;
+				$id_responsi = $key->id_responsi;
+				$id_atr_prem2 = $key->id_atr_perm2;
+				$class_prem2 = $key->class;
 			}
 		}
 
 		 $nilai_final = ($nilai_akhir+$responsi)/2;
 
-		$final =  $this->M_atr->cek_penilaian($nilai_final);
-		foreach ($final as $key => $value) {
+		 //buat penilaian di sini
+		 $final =  $this->M_atr->cek_penilaian($nilai_final);
+		 foreach ($final as $key => $value) {
 		 	$id_nilai = isset($value->id_nilai)? $value->id_nilai : '';
-		}//print_r($id_nilai);exit;
+		 }
 
-		 $atr_final = $this->M_atr->cek_aturan_final($class_prem1,$class_prem2,$sikap);//print_r($atr_final);exit;
+		 $atr_final = $this->M_atr->cek_aturan_final($class_prem1,$class_prem2,$sikap);
+		 //print_r($atr_final);exit;
 		 foreach ($atr_final as $key => $value_final) {
 		 	$id_aturan = isset($value_final->id_aturan)? $value_final->id_aturan : '';
-		 }//print_r($id_aturan);exit;
+		 }
 		 //print_r($responsi);exit;
 		//print_r($cek_hasil_akhir);exit;
 			//jika cek nilai kosong maka buat baru
@@ -196,14 +171,14 @@ class Responsi extends CI_Controller {
 				//insert nilai akhir
 				//$id_prak = $this->M_nilai_prak->tambah_akhir($data_nilai_prak);
 				$data_nilai_akhir = array(
-					'id_pelajaran' => $data_eksperimen,
-					'nim' => $data_mhs,
-					'id_responsi' => $resp,
-					'id_sikap' => $id_sikap,
+					'id_pelajaran' => $this->input->post('id_pelajaran'),
+					'nim' => $this->input->post('nim'),
+					'id_responsi' => $id_responsi,
 					'id_prak_akhir' => $id_prak_akhir,
+					'id_sikap' => $idsikap,
 					'nilai_akhir' => $nilai_final,
-					'id_nilai'=>$id_nilai,
-					'id_aturan' => $id_aturan
+					'id_aturan' => $id_aturan,
+					'id_nilai' => $id_nilai
 				);
 				$this->M_hasil_akhir->tambah($data_nilai_akhir);
 
@@ -224,25 +199,30 @@ class Responsi extends CI_Controller {
 				$this->M_hasil_akhir->edit($data_nilai_prak);
 			}
 		$this->session->set_flashdata("pesan", "<div class=\"alert alert-success\" id=\"alert\"><i class=\"glyphicon glyphicon-ok\"></i> Berhasil menambah data</div>");
-		redirect('back/responsi');}
+		redirect('back/sikap');}
 		else {
 			$this->session->set_flashdata('sukses', "<div class=\"alert alert-danger\" id=\"alert\"><i class=\"\"><strong>error!</strong><br></i> Data sudah ada</div>");
-			redirect('back/responsi/tambah');
+			redirect('back/sikap/tambah');
+			}
+		}
+	else{
+		$this->session->set_flashdata('sukses', "<div class=\"alert alert-danger\" id=\"alert\"><i class=\"\"><strong>error!</strong><br></i>anda tidak berhak merubah data</div>");
+			redirect('back/home_back');
 		}
 	}
 
 	public function edit($id) 
 	{	
-        $data['responsi'] = $this->M_responsi->get_cari_nilai($id);
-        $data['user'] = $this->M_responsi->get_user();
-        $data['mhs'] = $this->M_responsi->get_mahasiswa();
+         $data['sikap'] = $this->M_sikap->get_cari_nilai($id);
+         $data['user'] = $this->M_sikap->get_user();
+         $data['mhs'] = $this->M_sikap->get_mahasiswa();
          //$data['pel'] = $this->M_responsi->get_pelajaran();
-        $data['perm'] = $this->M_responsi->get_perm2();
-		$data['kur'] = $this->M_eksperimen->get_kurikulum();
+         //$data['perm'] = $this->M_responsi->get_perm2();
+         //$data['kur'] = $this->M_responsi->get_kurikulum();
 
         $this->load->view('layout/back/header');
 		$this->load->view('layout/back/sidebar');
-		$this->load->view('back/responsi/edit_responsi',$data);
+		$this->load->view('back/sikap/edit_sikap',$data);
 		$this->load->view('layout/back/footer');
 	
         }
@@ -251,7 +231,7 @@ class Responsi extends CI_Controller {
 	{
 		//print_r($_POST);exit;
 		$level= $this->session->userdata('level'); 
-                                if($level==1){
+                                if($level==3){
         $this->form_validation->set_rules('id_responsi','id_responsi','required');
 		$this->form_validation->set_rules('nilai_responsi','nilai_responsi','required');
 		$this->form_validation->set_rules('nim','nim','required');
@@ -265,33 +245,23 @@ class Responsi extends CI_Controller {
 		}else{
 
 	$data_eksperimen = $this->input->post('id_pelajaran');
-		
-		$responsi = $this->input->post('nilai_responsi');
+	$sikap = $this->input->post('sikap');
+	$idsikap = $this->input->post('id_sikap');
+	$responsi = $this->input->post('nilai_responsi');
 				//print_r($nilai_akhir);exit;
 				//$sesi = $cari_sesi->sesi;
 				//cari class dan id aturan prem1
-		$clustering = $this->M_atr->cek_aturan_perm2($responsi);
-		foreach ($clustering as $key => $value) {
-			$class_prem2 = $value->class;
-			$id_prem2 = $value->id_atr_perm2;
-		}
-
-	$data_responsi = array(
-			'id_responsi' => $this->input->post('id_responsi'),
-			'id_pelajaran' => $this->input->post('id_pelajaran'),
-			'nilai_responsi' => $this->input->post('nilai_responsi'),
+	$data_sikap = array(
+			'id_sikap'=> $this->input->post('id_sikap'),
+			'sikap' => $this->input->post('sikap'),
 			'nim' => $this->input->post('nim'),
-			//'id_atr_perm2' => $this->input->post('id_atr_perm2'),
-			'id_kurikulum' => $this->input->post('id_kurikulum'),
-			'id_user' => $this->input->post('id_user'),
-			'id_atr_perm2' => $id_prem2
+			'id_pelajaran' => $this->input->post('id_pelajaran'),
+			'id_user' => $iduser
 			);
 //print_r($data_user);exit;
-	$resp = $this->input->post('id_responsi');
-	$this->M_responsi->edit($data_responsi);
+	$sikap = $this->input->post('id_sikap');
+	$this->M_sikap->edit($data_sikap);
 	$cek_prak = $this->M_nilai_prak->cek_nilai_prak($data_eksperimen,$data_mhs);
-		$responsi = $this->input->post('nilai_responsi');
-		//print_r($cek_responsi);exit;
 		if($cek_prak == null){
 			$nilai_akhir = 0;
 			$id_prak_akhir = '';
@@ -306,28 +276,31 @@ class Responsi extends CI_Controller {
 				$class_prem1 = isset($key->class)? $key->class : '';
 			}
 		}
-
-		$cek_sikap = $this->M_sikap->cek_nilai_sikap($data_eksperimen,$data_mhs);
+	$cek_responsi = $this->M_responsi->cek_nilai_responsi($data_eksperimen,$data_mhs);
 		//print_r($cek_responsi);exit;
-		if($cek_sikap == null){
-			$sikap = '-';
-			$id_sikap = '';
+		if($cek_responsi == null){
+			$responsi = 0;
+			$id_responsi = '';
+			$id_atr_prem2 = '';
+			$class_prem2 = '-';
 		}else{
-			foreach ($cek_sikap as $key) {
+			foreach ($cek_responsi as $key) {
 				//cek responsi jika kosong maka ubah ke 0
-				$sikap = $key->sikap;
-				$id_sikap = $key->id_sikap;
+				$responsi = $key->nilai_responsi;
+				$id_responsi = $key->id_responsi;
+				$id_atr_prem2 = $key->id_atr_perm2;
+				$class_prem2 = $key->class;
 			}
 		}
 
-		 $nilai_final = ($nilai_akhir+$responsi)/2;
+	$nilai_final = ($nilai_akhir+$responsi)/2;
 
-		 $final =  $this->M_atr->cek_penilaian($nilai_final);
+	$final =  $this->M_atr->cek_penilaian($nilai_final);
 		foreach ($final as $key => $value) {
 		 	$id_nilai = isset($value->id_nilai)? $value->id_nilai : '';
 		}
 
-		 $atr_final = $this->M_atr->cek_aturan_final($class_prem1,$class_prem2,$sikap);
+	$atr_final = $this->M_atr->cek_aturan_final($class_prem1,$class_prem2,$sikap);
 		 foreach ($atr_final as $key => $value_final) {
 		 	$id_aturan = isset($value_final->id_aturan)? $value_final->id_aturan : '';
 		 }
@@ -345,11 +318,11 @@ class Responsi extends CI_Controller {
 				$data_nilai_akhir = array(
 					'id_pelajaran' => $this->input->post('id_pelajaran'),
 					'nim' => $this->input->post('nim'),
-					'id_responsi' => $resp,
-					'id_sikap' => $id_sikap,
+					'id_responsi' => $id_responsi,
+					'id_sikap'=>$idsikap,
 					'id_prak_akhir' => $id_prak_akhir,
-					'id_aturan' => $id_aturan,
 					'id_nilai' => $id_nilai,
+					'id_aturan' => $id_aturan,
 					'nilai_akhir' => $nilai_final
 				);
 				$this->M_hasil_akhir->tambah($data_nilai_akhir);
@@ -364,47 +337,26 @@ class Responsi extends CI_Controller {
 				$data_nilai_prak = array(
 					'id_hasil_akhir' => $id_akhir,
 					'id_prak_akhir' => $id_prak_akhir,
-					'id_aturan'=>$id_aturan,
-					'id_nilai'=>$id_nilai,
-					'id_responsi' =>$resp,
-					'nilai_akhir' => $nilai_final
+					'nilai_akhir' => $nilai_final,
+					'id_nilai' => $id_nilai,
+					'id_aturan' => $id_aturan,
+					'id_sikap'=>$idsikap
 				);
 				$this->M_hasil_akhir->edit($data_nilai_prak);
 			}
 	$this->session->set_flashdata('sukses', "<div class=\"alert alert-success\" id=\"alert\"><i class=\"\"></i> Data berhasil diubah</div>");
-	redirect('back/responsi');}}
-	else {
-		//$this->form_validation->set_rules('id_responsi','id_responsi','required');
-		$this->form_validation->set_rules('nilai_responsi','pertemuan','required');
-		//$this->form_validation->set_rules('nim','nim','required');
-		$this->form_validation->set_rules('id_atr_perm2','id_atr_perm2','required');
-		//$this->form_validation->set_rules('id_pelajaran','id_pelajaran','required');
-		$this->form_validation->set_rules('id_kurikulum','id_kurikulum','required');
-		$this->form_validation->set_rules('id_user','id_user','required');
-		if($this->form_validation->run() == false){
-			$this->session->set_flashdata('sukses', "<div class=\"alert alert-danger\" id=\"alert\"><i class=\"\"><strong>error!</strong><br></i> Gagal merubah data</div>");
-	redirect('back/responsi/edit');
-		}else{
-			$id= $this->session->userdata('id'); 
-		$data_responsi = array(
-			'id_responsi' => $this->input->post('id_responsi'),
-			'nilai_responsi' => $this->input->post('nilai_responsi'),
-			'nim' => $this->input->post('nim'),
-			'id_atr_perm2' => $this->input->post('id_atr_perm2'),
-			'id_kurikulum' => $this->input->post('id_kurikulum'),
-			'id_user' => $this->input->post('id_user')
-			);
-//print_r($data_user);exit;
-	$this->M_responsi->edit($data_responsi);
-	$this->session->set_flashdata('sukses', "<div class=\"alert alert-success\" id=\"alert\"><i class=\"\"></i> Data berhasil diubah </div>");
-	redirect('back/responsi');}
-	}
+	redirect('back/sikap');}}
+	else{
+		$this->session->set_flashdata('sukses', "<div class=\"alert alert-danger\" id=\"alert\"><i class=\"\"><strong>error!</strong><br></i>anda tidak berhak merubah data</div>");
+			redirect('back/home_back');
+		}
+	
 	}
 
 	public function delete($id) {
 		
-		$this->M_responsi->delete($id);
+		$this->M_sikap->delete($id);
 		$this->session->set_flashdata("pesan", "<div class=\"alert alert-success\" id=\"alert\"><i class=\"glyphicon glyphicon-ok\"></i> Data berhasil dihapus</div>");
-		redirect('back/responsi');
+		redirect('back/sikap');
 	}
 }

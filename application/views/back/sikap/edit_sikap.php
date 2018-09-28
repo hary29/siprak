@@ -27,11 +27,11 @@
                     <div class="col-lg-12 col-md-12">
                         <div class="white-box">
                                     <?php 
-                                    foreach($responsi as $list) { ?>
+                                    foreach($sikap as $list) { ?>
 
-                                    <form class="form-horizontal" method="post" action="<?php echo base_url() ?>back/responsi/edit_aksi">
+                                    <form class="form-horizontal" method="post" action="<?php echo base_url() ?>back/sikap/edit_aksi">
 
-                                        <input type="hidden" name="id_responsi" required="" value="<?php echo $list['id_responsi']; ?>" readonly="readonly" class="form-control" />
+                                        <input type="hidden" name="id_responsi" required="" value="<?php echo $list['id_sikap']; ?>" readonly="readonly" class="form-control" />
 
                                         <div class="form-group">
                                         <label for="gejala" class="col-sm-4">Nama Mahasiswa</label>
@@ -45,39 +45,29 @@
                                         </div>
                                         </div>
 
-                                        <div class="form-group">
-                                        <label for="gejala" class="col-sm-4">Nilai Responsi</label>
-                                        <div class="col-sm-4">
-                                            <input type="number" placeholder="1.00" step="0.01" min="0" max="10" name="nilai_responsi" class="form-control" value="<?php echo $list['nilai_responsi']; ?>"/>
-                                        </div>
-                                        </div>
+			                            <div class="form-group">
+								            <label class="col-xs-2">Bagaimana sikap mahasiswa ? </label>
+								            <div class="controls">
+								            <div class="col-xs-2">
+								                <label class="radio-inline">
+								                    <input type="radio" name="sikap" value="Baik" class="detail" <?php echo ($list['sikap']=='Baik')?'checked':'' ?>> Baik
+								                </label>
+								            </div>
+								            <div class="col-xs-1">
+								                <label class="radio-inline">
+								                    <input type="radio" name="sikap" value="Sedang" class="detail" <?php echo ($list['sikap']=='Sedang')?'checked':'' ?>> Sedang
+								                </label>
+			            					</div>
+			            					<div class="col-xs-1">
+								                <label class="radio-inline">
+								                    <input type="radio" name="sikap" value="Kurang" class="detail"
+								                    <?php echo ($list['sikap']=='Kurang')?'checked':'' ?>> Kurang
+								                </label>
+			            					</div>
+				            				</div>
+				            			</div>
 
-                                        <div class="form-group">
-                                        <label for="gejala" class="col-sm-4">Semester dan Tahun ajaran</label>
-                                        <div class="col-sm-4">
-                                            <select name="id_kurikulum" id="" class="form-control">
-                                            <?php foreach($kur as $m) { ?>
-                                            <option value="<?php echo $m['id_kurikulum']?>"<?php if($list['id_kurikulum'] == ($m['id_kurikulum'])){ echo 'selected'; } ?>><?php echo $m['semester']?> - <?php echo $m['tahun']?>
-                                            </option>
-                                            <?php } ?>
-                                            </select>
-                                        </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                        <label for="gejala" class="col-sm-4">Dosen</label>
-                                        <div class="col-sm-4">
-                                            <select name="id_user" id="" class="form-control">
-                                            <?php foreach($user as $m) { ?>
-                                            <option value="<?php echo $m['id_user']?>"<?php if($list['id_user'] == ($m['id_user'])){ echo 'selected'; } ?>><?php echo $m['nama']?>
-                                            </option>
-                                            <?php } ?>
-                                            </select>
-                                        </div>
-                                        </div>
-
-                                       
-                                        
+                              
                                    <?php } ?>
                                         
                                        

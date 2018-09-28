@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 28, 2018 at 08:25 AM
+-- Generation Time: Aug 31, 2018 at 08:05 AM
 -- Server version: 10.1.33-MariaDB
 -- PHP Version: 7.2.6
 
@@ -41,9 +41,9 @@ CREATE TABLE `tb_atr_perm1` (
 --
 
 INSERT INTO `tb_atr_perm1` (`id_atr_perm1`, `class`, `batas_bawah`, `batas_atas`, `sesi`) VALUES
-(1, 'Tinggi', 77, 154, 14),
-(2, 'Sedang', 51.3333, 76, 14),
-(3, 'Rendah', 0, 50.3333, 14);
+(3, 'Tinggi', 77, 154, 14),
+(4, 'Sedang', 51.3333, 76, 14),
+(5, 'Rendah', 0, 50.3333, 14);
 
 -- --------------------------------------------------------
 
@@ -55,17 +55,18 @@ CREATE TABLE `tb_atr_perm2` (
   `id_atr_perm2` int(10) NOT NULL,
   `class` varchar(255) DEFAULT NULL,
   `batas_bawah` float DEFAULT NULL,
-  `batas_atas` float DEFAULT NULL
+  `batas_atas` float DEFAULT NULL,
+  `sesi` int(3) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tb_atr_perm2`
 --
 
-INSERT INTO `tb_atr_perm2` (`id_atr_perm2`, `class`, `batas_bawah`, `batas_atas`) VALUES
-(1, 'Tinggi', 70, 140),
-(2, 'Sedang', 46.6667, 69),
-(3, 'Rendah', 0, 45.6667);
+INSERT INTO `tb_atr_perm2` (`id_atr_perm2`, `class`, `batas_bawah`, `batas_atas`, `sesi`) VALUES
+(2, 'Tinggi', 28, 56, 14),
+(3, 'Sedang', 18.6667, 27, 14),
+(4, 'Rendah', 0, 17.6667, 14);
 
 -- --------------------------------------------------------
 
@@ -77,63 +78,8 @@ CREATE TABLE `tb_aturan` (
   `id_aturan` int(11) NOT NULL,
   `permis1` varchar(255) DEFAULT NULL,
   `permis2` varchar(255) DEFAULT NULL,
-  `permis3` varchar(255) DEFAULT NULL,
   `hasil` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `tb_aturan`
---
-
-INSERT INTO `tb_aturan` (`id_aturan`, `permis1`, `permis2`, `permis3`, `hasil`) VALUES
-(2, '-', 'Rendah', '-', 'Nilai Praktikum kosong'),
-(3, '-', '-', '-', 'Permis kosong'),
-(4, 'Rendah', 'Tinggi', '-', 'Nilai Sikap Kosong'),
-(5, 'Rendah', 'Rendah', '-', 'Tidak lulus'),
-(6, 'Rendah', 'Sedang', '-', 'Nilai Sikap Kosong'),
-(7, 'Sedang', 'Rendah', '-', 'Nilai Sikap Kosong'),
-(8, 'Sedang', 'Sedang', '-', 'Nilai Sikap Kosong'),
-(9, 'Sedang', 'Tinggi', '-', 'Nilai Sikap Kosong'),
-(10, 'Tinggi', 'Rendah', '-', 'Nilai Sikap Kosong'),
-(11, 'Tinggi', 'Sedang', '-', 'Nilai Sikap Kosong'),
-(12, 'Tinggi', 'Tinggi', '-', 'Nilai Sikap Kosong'),
-(16, 'Rendah', '-', 'Baik', 'Responsi kosong'),
-(17, 'Rendah', '-', 'Sedang', 'Responsi kosong'),
-(18, 'Rendah', '-', '-', 'Responsi kosong'),
-(19, '-', 'Rendah', 'Sedang', 'Nilai Praktikum kosong'),
-(20, '-', 'Rendah', 'Kurang', 'Nilai Praktikum kosong'),
-(21, '-', 'Rendah', 'Baik', 'Nilai Praktikum kosong'),
-(22, 'Rendah', '-', 'Kurang', 'Responsi kosong'),
-(23, 'Rendah', 'Tinggi', 'Baik', 'Tidak lulus'),
-(24, 'Rendah', 'Tinggi', 'Sedang', 'Tidak lulus'),
-(25, 'Rendah', 'Tinggi', 'Kurang', 'Tidak lulus'),
-(26, 'Rendah', 'Rendah', 'Baik', 'Tidak lulus'),
-(27, 'Rendah', 'Rendah', 'Sedang', 'Tidak lulus'),
-(28, 'Rendah', 'Rendah', 'Kurang', 'Tidak lulus'),
-(29, 'Rendah', 'Sedang', 'Baik', 'Tidak lulus'),
-(30, 'Rendah', 'Sedang', 'Sedang', 'Tidak lulus'),
-(31, 'Rendah', 'Sedang', 'Kurang', 'Tidak lulus'),
-(32, 'Sedang', 'Rendah', 'Baik', 'Lulus'),
-(33, 'Sedang', 'Rendah', 'Sedang', 'Lulus'),
-(34, 'Sedang', 'Rendah', 'Kurang', 'Tidak lulus'),
-(35, 'Sedang', 'Sedang', 'Baik', 'Lulus'),
-(36, 'Sedang', 'Sedang', 'Sedang', 'Lulus'),
-(37, 'Sedang', 'Sedang', 'Kurang', 'Tidak lulus'),
-(38, 'Sedang', 'Tinggi', 'Baik', 'Lulus'),
-(39, 'Sedang', 'Tinggi', 'Sedang', 'Lulus'),
-(40, 'Sedang', 'Tinggi', 'Kurang', 'Tidak lulus'),
-(41, 'Tinggi', 'Rendah', 'Baik', 'Lulus'),
-(42, 'Tinggi', 'Rendah', 'Sedang', 'Lulus'),
-(43, 'Tinggi', 'Rendah', 'Kurang', 'Tidak lulus'),
-(44, 'Tinggi', 'Sedang', 'Baik', 'Lulus'),
-(45, 'Tinggi', 'Sedang', 'Sedang', 'Lulus'),
-(46, 'Tinggi', 'Sedang', 'Kurang', 'Tidak lulus'),
-(47, 'Tinggi', 'Tinggi', 'Baik', 'Lulus'),
-(48, 'Tinggi', 'Tinggi', 'Sedang', 'Lulus'),
-(49, 'Tinggi', 'Tinggi', 'Kurang', 'Tidak lulus'),
-(50, '-', '-', 'Baik', 'Permis kosong'),
-(51, '-', '-', 'Sedang', 'Permis kosong'),
-(52, '-', '-', 'Kurang', 'Permis kosong');
 
 -- --------------------------------------------------------
 
@@ -148,18 +94,17 @@ CREATE TABLE `tb_hasil_akhir` (
   `id_prak_akhir` int(10) DEFAULT NULL,
   `id_responsi` int(10) DEFAULT NULL,
   `id_aturan` int(10) DEFAULT NULL,
-  `id_sikap` int(10) DEFAULT NULL,
   `id_user` int(10) DEFAULT NULL,
-  `id_nilai` int(10) DEFAULT NULL,
-  `nilai_akhir` float DEFAULT NULL
+  `nilai` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tb_hasil_akhir`
 --
 
-INSERT INTO `tb_hasil_akhir` (`id_hasil_akhir`, `nim`, `id_pelajaran`, `id_prak_akhir`, `id_responsi`, `id_aturan`, `id_sikap`, `id_user`, `id_nilai`, `nilai_akhir`) VALUES
-(2, 123453, 4, 1, 27, 26, 3, NULL, 12, 4.85714);
+INSERT INTO `tb_hasil_akhir` (`id_hasil_akhir`, `nim`, `id_pelajaran`, `id_prak_akhir`, `id_responsi`, `id_aturan`, `id_user`, `nilai`) VALUES
+(4, 123453, 4, 21, 3, NULL, NULL, 7.90577),
+(7, 15812, 2, 0, 8, NULL, NULL, 3.5);
 
 -- --------------------------------------------------------
 
@@ -296,18 +241,17 @@ CREATE TABLE `tb_mahasiswa` (
   `nim` int(20) NOT NULL,
   `nama_mhs` varchar(60) NOT NULL,
   `id_kelompok` int(10) NOT NULL,
-  `id_pelajaran` int(10) DEFAULT NULL,
-  `id_user` int(10) DEFAULT NULL
+  `id_pelajaran` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tb_mahasiswa`
 --
 
-INSERT INTO `tb_mahasiswa` (`nim`, `nama_mhs`, `id_kelompok`, `id_pelajaran`, `id_user`) VALUES
-(14766, 'Nurmala Sari', 2, 2, NULL),
-(15812, 'Afira Dinda Aningtyas', 1, 2, NULL),
-(123453, 'Paijo', 2, 4, NULL);
+INSERT INTO `tb_mahasiswa` (`nim`, `nama_mhs`, `id_kelompok`, `id_pelajaran`) VALUES
+(14766, 'Nurmala Sari', 2, 2),
+(15812, 'Afira Dinda Aningtyas', 1, 2),
+(123453, 'Paijo', 2, 4);
 
 -- --------------------------------------------------------
 
@@ -317,7 +261,7 @@ INSERT INTO `tb_mahasiswa` (`nim`, `nama_mhs`, `id_kelompok`, `id_pelajaran`, `i
 
 CREATE TABLE `tb_nilai_prak` (
   `id_nilai_prak` int(5) NOT NULL,
-  `id_sub` int(10) NOT NULL,
+  `pertemuan` int(2) NOT NULL,
   `id_pelajaran` int(10) NOT NULL,
   `pretest` float NOT NULL,
   `laporan` float NOT NULL,
@@ -329,10 +273,23 @@ CREATE TABLE `tb_nilai_prak` (
 -- Dumping data for table `tb_nilai_prak`
 --
 
-INSERT INTO `tb_nilai_prak` (`id_nilai_prak`, `id_sub`, `id_pelajaran`, `pretest`, `laporan`, `nim`, `id_user`) VALUES
+INSERT INTO `tb_nilai_prak` (`id_nilai_prak`, `pertemuan`, `id_pelajaran`, `pretest`, `laporan`, `nim`, `id_user`) VALUES
 (1, 1, 1, 7.8, 8.2, 14766, 4),
 (2, 2, 2, 3.57, 4.65, 14766, 4),
-(132, 1, 4, 1, 9, 123453, 4);
+(33, 2, 4, 1, 4, 123453, 0),
+(34, 3, 4, 1, 3.96, 123453, 0),
+(35, 4, 4, 0.1, 5, 123453, 0),
+(36, 5, 4, 1, 6, 123453, 0),
+(37, 6, 4, 1, 6.99, 123453, 0),
+(38, 7, 4, 1, 8, 123453, 0),
+(39, 8, 4, 1, 7, 123453, 0),
+(40, 9, 4, 1, 10, 123453, 0),
+(41, 10, 4, 1, 10, 123453, 0),
+(42, 11, 4, 1, 8, 123453, 0),
+(43, 12, 4, 1, 6, 123453, 0),
+(44, 13, 4, 1, 8, 123453, 0),
+(45, 14, 4, 1, 5, 123453, 0),
+(46, 1, 4, 1, 7, 123453, 0);
 
 -- --------------------------------------------------------
 
@@ -344,53 +301,17 @@ CREATE TABLE `tb_pelajaran` (
   `id_pelajaran` int(10) NOT NULL,
   `id_kurikulum` int(10) DEFAULT NULL,
   `nama_pelajaran` varchar(255) DEFAULT NULL,
-  `sesi` int(3) DEFAULT NULL,
-  `id_user` int(10) DEFAULT NULL
+  `sesi` int(3) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tb_pelajaran`
 --
 
-INSERT INTO `tb_pelajaran` (`id_pelajaran`, `id_kurikulum`, `nama_pelajaran`, `sesi`, `id_user`) VALUES
-(1, 7, 'Efek Foto Listriki', 1, NULL),
-(2, 1, 'Sinar X', 0, NULL),
-(4, 7, 'sdf', 14, 5),
-(5, 7, 'test', 14, NULL),
-(6, 7, 'coba', 14, NULL),
-(8, 7, 'tt', 14, NULL);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tb_penilaian`
---
-
-CREATE TABLE `tb_penilaian` (
-  `id_nilai` int(10) NOT NULL,
-  `nilai_huruf` varchar(3) DEFAULT NULL,
-  `nilai_angka_bawah` float DEFAULT NULL,
-  `nilai_angka_atas` float DEFAULT NULL,
-  `ip` float DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `tb_penilaian`
---
-
-INSERT INTO `tb_penilaian` (`id_nilai`, `nilai_huruf`, `nilai_angka_bawah`, `nilai_angka_atas`, `ip`) VALUES
-(1, 'A', 80, 0, 4),
-(2, 'A-', 77.5, 79.99, 3.75),
-(3, 'A/B', 75, 77.49, 3.5),
-(4, 'B+', 72.5, 74.99, 3.25),
-(5, 'B', 70, 72.49, 3),
-(6, 'B-', 67.5, 69.99, 2.75),
-(7, 'B/C', 65, 67.49, 2.5),
-(8, 'C+', 62.5, 64.99, 2.25),
-(9, 'C', 60, 62.49, 2),
-(10, 'C-', 57, 59.99, 1.75),
-(11, 'D', 55, 56.99, 1),
-(12, 'E', 0, 54.99, 0);
+INSERT INTO `tb_pelajaran` (`id_pelajaran`, `id_kurikulum`, `nama_pelajaran`, `sesi`) VALUES
+(1, 7, 'Efek Foto Listriki', 1),
+(2, 1, 'Sinar X', 0),
+(4, 7, 'sdf', 14);
 
 -- --------------------------------------------------------
 
@@ -412,7 +333,7 @@ CREATE TABLE `tb_prak_akhir` (
 --
 
 INSERT INTO `tb_prak_akhir` (`id_prak_akhir`, `nim`, `id_user`, `id_pelajaran`, `id_atr_perm1`, `nilai`) VALUES
-(1, 123453, NULL, 4, 3, 0.714286);
+(21, 123453, NULL, 4, NULL, 8.31154);
 
 -- --------------------------------------------------------
 
@@ -436,52 +357,8 @@ CREATE TABLE `tb_responsi` (
 
 INSERT INTO `tb_responsi` (`id_responsi`, `nilai_responsi`, `nim`, `id_atr_perm2`, `id_kurikulum`, `id_user`, `id_pelajaran`) VALUES
 (1, 2.79, 14766, 1, 1, 5, NULL),
-(8, 7, 15812, NULL, 7, 5, NULL),
-(27, 9, 123453, 3, 7, 5, 4);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tb_sikap`
---
-
-CREATE TABLE `tb_sikap` (
-  `id_sikap` int(10) NOT NULL,
-  `nim` int(20) DEFAULT NULL,
-  `id_pelajaran` int(10) DEFAULT NULL,
-  `id_user` int(10) DEFAULT NULL,
-  `sikap` enum('Baik','Sedang','Kurang') DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `tb_sikap`
---
-
-INSERT INTO `tb_sikap` (`id_sikap`, `nim`, `id_pelajaran`, `id_user`, `sikap`) VALUES
-(10, 14766, 2, 2, 'Baik'),
-(11, NULL, NULL, 2, NULL),
-(12, 15812, 2, 2, 'Baik');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tb_sub_pelajaran`
---
-
-CREATE TABLE `tb_sub_pelajaran` (
-  `id_sub` int(10) NOT NULL,
-  `id_pelajaran` int(10) DEFAULT NULL,
-  `nama_sub_pelajaran` varchar(255) DEFAULT NULL,
-  `id_user` int(10) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `tb_sub_pelajaran`
---
-
-INSERT INTO `tb_sub_pelajaran` (`id_sub`, `id_pelajaran`, `nama_sub_pelajaran`, `id_user`) VALUES
-(1, 4, 'w', 4),
-(2, 1, 'r', 7);
+(3, 7.5, 123453, 0, NULL, NULL, 4),
+(8, 7, 15812, NULL, 7, 5, NULL);
 
 -- --------------------------------------------------------
 
@@ -504,7 +381,7 @@ CREATE TABLE `tb_user` (
 --
 
 INSERT INTO `tb_user` (`id_user`, `nama`, `jenis_kelamin`, `username`, `password`, `id_level`, `pass`) VALUES
-(2, 'aji', 'L', 'admin', '827ccb0eea8a706c4c34a16891f84e7b', 1, '12345'),
+(2, 'aji', 'L', 'aji', '827ccb0eea8a706c4c34a16891f84e7b', 1, '12345'),
 (3, 'laboran', 'P', 'laboran', '827ccb0eea8a706c4c34a16891f84e7b', 3, '12345'),
 (4, 'asisten1', 'L', 'asisten1', '827ccb0eea8a706c4c34a16891f84e7b', 4, '12345'),
 (5, 'dosen1', 'P', 'dosen1', '827ccb0eea8a706c4c34a16891f84e7b', 2, '12345'),
@@ -592,12 +469,6 @@ ALTER TABLE `tb_pelajaran`
   ADD KEY `id_kurikulum` (`id_kurikulum`);
 
 --
--- Indexes for table `tb_penilaian`
---
-ALTER TABLE `tb_penilaian`
-  ADD PRIMARY KEY (`id_nilai`);
-
---
 -- Indexes for table `tb_prak_akhir`
 --
 ALTER TABLE `tb_prak_akhir`
@@ -616,21 +487,6 @@ ALTER TABLE `tb_responsi`
   ADD KEY `creation_id` (`id_user`);
 
 --
--- Indexes for table `tb_sikap`
---
-ALTER TABLE `tb_sikap`
-  ADD PRIMARY KEY (`id_sikap`),
-  ADD KEY `nim` (`nim`),
-  ADD KEY `id_pelajaran` (`id_pelajaran`),
-  ADD KEY `id_user` (`id_user`);
-
---
--- Indexes for table `tb_sub_pelajaran`
---
-ALTER TABLE `tb_sub_pelajaran`
-  ADD PRIMARY KEY (`id_sub`);
-
---
 -- Indexes for table `tb_user`
 --
 ALTER TABLE `tb_user`
@@ -645,25 +501,25 @@ ALTER TABLE `tb_user`
 -- AUTO_INCREMENT for table `tb_atr_perm1`
 --
 ALTER TABLE `tb_atr_perm1`
-  MODIFY `id_atr_perm1` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_atr_perm1` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tb_atr_perm2`
 --
 ALTER TABLE `tb_atr_perm2`
-  MODIFY `id_atr_perm2` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_atr_perm2` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `tb_aturan`
 --
 ALTER TABLE `tb_aturan`
-  MODIFY `id_aturan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id_aturan` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tb_hasil_akhir`
 --
 ALTER TABLE `tb_hasil_akhir`
-  MODIFY `id_hasil_akhir` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_hasil_akhir` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `tb_jadwal`
@@ -687,43 +543,25 @@ ALTER TABLE `tb_kurikulum`
 -- AUTO_INCREMENT for table `tb_nilai_prak`
 --
 ALTER TABLE `tb_nilai_prak`
-  MODIFY `id_nilai_prak` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
+  MODIFY `id_nilai_prak` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `tb_pelajaran`
 --
 ALTER TABLE `tb_pelajaran`
-  MODIFY `id_pelajaran` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- AUTO_INCREMENT for table `tb_penilaian`
---
-ALTER TABLE `tb_penilaian`
-  MODIFY `id_nilai` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_pelajaran` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `tb_prak_akhir`
 --
 ALTER TABLE `tb_prak_akhir`
-  MODIFY `id_prak_akhir` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_prak_akhir` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `tb_responsi`
 --
 ALTER TABLE `tb_responsi`
-  MODIFY `id_responsi` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
-
---
--- AUTO_INCREMENT for table `tb_sikap`
---
-ALTER TABLE `tb_sikap`
-  MODIFY `id_sikap` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
-
---
--- AUTO_INCREMENT for table `tb_sub_pelajaran`
---
-ALTER TABLE `tb_sub_pelajaran`
-  MODIFY `id_sub` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_responsi` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `tb_user`
@@ -754,14 +592,6 @@ ALTER TABLE `tb_pelajaran`
 --
 ALTER TABLE `tb_prak_akhir`
   ADD CONSTRAINT `tb_prak_akhir_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `tb_user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `tb_sikap`
---
-ALTER TABLE `tb_sikap`
-  ADD CONSTRAINT `tb_sikap_ibfk_1` FOREIGN KEY (`nim`) REFERENCES `tb_mahasiswa` (`nim`),
-  ADD CONSTRAINT `tb_sikap_ibfk_2` FOREIGN KEY (`id_pelajaran`) REFERENCES `tb_pelajaran` (`id_pelajaran`),
-  ADD CONSTRAINT `tb_sikap_ibfk_3` FOREIGN KEY (`id_user`) REFERENCES `tb_user` (`id_user`);
 
 --
 -- Constraints for table `tb_user`

@@ -14,6 +14,7 @@ class Nilai_prak extends CI_Controller {
 		$this->load->model('M_responsi');
 		$this->load->model('M_hasil_akhir');
 		$this->load->model('M_atr');
+		$this->load->model('M_sikap');
 	}
 
 	public function index($offset=0)
@@ -217,11 +218,28 @@ class Nilai_prak extends CI_Controller {
 								$class_prem2 = $key->class;
 							}
 						}
+						$cek_sikap = $this->M_sikap->cek_nilai_sikap($data_eksperimen,$data_mhs);
+						//print_r($cek_responsi);exit;
+						if($cek_sikap == null){
+							$sikap = '-';
+							$id_sikap = '';
+						}else{
+							foreach ($cek_sikap as $key) {
+								//cek responsi jika kosong maka ubah ke 0
+								$sikap = $key->sikap;
+								$id_sikap = $key->id_sikap;
+							}
+						}
 
 						 $nilai_final = ($nilai_akhir+$responsi)/2;
+
+						 $final =  $this->M_atr->cek_penilaian($nilai_final);
+							foreach ($final as $key => $value) {
+							 	$id_nilai = isset($value->id_nilai)? $value->id_nilai : '';
+							}
 						 //cari class dari nilai final
 						 //print_r($class_prem1); print_r($class_prem2);
-						 $atr_final = $this->M_atr->cek_aturan_final($class_prem1,$class_prem2);
+						 $atr_final = $this->M_atr->cek_aturan_final($class_prem1,$class_prem2,$sikap);
 						 //print_r($atr_final);//exit;
 						 foreach ($atr_final as $value_final) {
 						 	$id_aturan = $value_final->id_aturan;
@@ -243,6 +261,7 @@ class Nilai_prak extends CI_Controller {
 									'id_responsi' => $id_responsi,
 									'id_prak_akhir' => $id_p,
 									'nilai_akhir' => $nilai_final,
+									'id_nilai'=> $id_nilai,
 									'id_aturan' => $id_aturan
 								);
 								$this->M_hasil_akhir->tambah($data_nilai_akhir);
@@ -258,7 +277,8 @@ class Nilai_prak extends CI_Controller {
 									'id_hasil_akhir' => $id_akhir,
 									'id_responsi' => $id_responsi,
 									'nilai_akhir' => $nilai_final,
-									'id_aturan' => $id_aturan
+									'id_aturan' => $id_aturan,
+									'id_nilai' =>$id_nilai
 								);
 								$this->M_hasil_akhir->edit($data_nilai_prak);
 							}
@@ -293,11 +313,28 @@ class Nilai_prak extends CI_Controller {
 								$class_prem2 = $key->class;
 							}
 						}
+						$cek_sikap = $this->M_sikap->cek_nilai_sikap($data_eksperimen,$data_mhs);
+						//print_r($cek_responsi);exit;
+						if($cek_sikap == null){
+							$sikap = '-';
+							$id_sikap = '';
+						}else{
+							foreach ($cek_sikap as $key) {
+								//cek responsi jika kosong maka ubah ke 0
+								$sikap = $key->sikap;
+								$id_sikap = $key->id_sikap;
+							}
+						}
 
 						 $nilai_final = ($nilai_akhir+$responsi)/2;
+
+						 $final =  $this->M_atr->cek_penilaian($nilai_final);
+							foreach ($final as $key => $value) {
+							 	$id_nilai = isset($value->id_nilai)? $value->id_nilai : '';
+							}
 						 //cari class dari nilai final
 						 //print_r($class_prem1); print_r($class_prem2);
-						 $atr_final = $this->M_atr->cek_aturan_final($class_prem1,$class_prem2);//print_r($atr_final);exit;
+						 $atr_final = $this->M_atr->cek_aturan_final($class_prem1,$class_prem2,$sikap);//print_r($atr_final);exit;
 						 foreach ($atr_final as $key => $value_final) {
 						 	$id_aturan = $value_final->id_aturan;
 						 }
@@ -318,7 +355,8 @@ class Nilai_prak extends CI_Controller {
 									'id_responsi' => $id_responsi,
 									'id_prak_akhir' => $id,
 									'nilai_akhir' => $nilai_final,
-									'id_aturan'=>$id_aturan
+									'id_aturan'=>$id_aturan,
+									'id_nilai'=>$id_nilai
 								);
 								$this->M_hasil_akhir->tambah($data_nilai_akhir);
 
@@ -333,7 +371,8 @@ class Nilai_prak extends CI_Controller {
 									'id_hasil_akhir' => $id_akhir,
 									'id_responsi' => $id_responsi,
 									'nilai_akhir' => $nilai_final,
-									'id_aturan' => $id_aturan
+									'id_aturan' => $id_aturan,
+									'id_nilai' => $id_nilai
 								);
 								$this->M_hasil_akhir->edit($data_nilai_prak);
 							}
@@ -445,10 +484,26 @@ class Nilai_prak extends CI_Controller {
 								$class_prem2 = isset($key->class)? $key->class : '';
 							}
 						}
+					$cek_sikap = $this->M_sikap->cek_nilai_sikap($data_eksperimen,$data_mhs);
+						//print_r($cek_responsi);exit;
+						if($cek_sikap == null){
+							$sikap = '-';
+							$id_sikap = '';
+						}else{
+							foreach ($cek_sikap as $key) {
+								//cek responsi jika kosong maka ubah ke 0
+								$sikap = $key->sikap;
+								$id_sikap = $key->id_sikap;
+							}
+						}
 
 					 $nilai_final = ($nilai_akhir+$responsi)/2;
+					 $final =  $this->M_atr->cek_penilaian($nilai_final);
+						foreach ($final as $key => $value) {
+						 	$id_nilai = isset($key->id_nilai)? $key->id_nilai : '';
+						}
 						 //cari class dari nilai final
-						 $atr_final = $this->M_atr->cek_aturan_final($class_prem1,$class_prem2);
+						 $atr_final = $this->M_atr->cek_aturan_final($class_prem1,$class_prem2,$sikap);
 						 foreach ($atr_final as $key => $value_final) {
 						 	$id_aturan = isset($key->id_aturan)? $key->id_aturan : '';
 						 }
@@ -467,9 +522,11 @@ class Nilai_prak extends CI_Controller {
 							'id_pelajaran' => $this->input->post('id_pelajaran'),
 							'nim' => $this->input->post('nim'),
 							'id_responsi' => $id_responsi,
+							'id_sikap' => $id_sikap,
 							'id_prak_akhir' => $id_p,
 							'nilai_akhir' => $nilai_final,
-							'id_aturan' =>$id_aturan
+							'id_aturan' =>$id_aturan,
+							'id_nilai'=>$id_nilai
 						);
 						$this->M_hasil_akhir->tambah($data_nilai_akhir);
 
@@ -484,7 +541,8 @@ class Nilai_prak extends CI_Controller {
 							'id_hasil_akhir' => $id_akhir,
 							'id_responsi' => $id_responsi,
 							'nilai_akhir' => $nilai_final,
-							'id_aturan' => $id_aturan
+							'id_aturan' => $id_aturan,
+							'id_nilai'=> $id_nilai
 						);
 						$this->M_hasil_akhir->edit($data_nilai_prak);
 					}
@@ -521,12 +579,28 @@ class Nilai_prak extends CI_Controller {
 								$class_prem2 = isset($key->class)? $key->class : '';
 							}
 						}
+					$cek_sikap = $this->M_sikap->cek_nilai_sikap($data_eksperimen,$data_mhs);
+						//print_r($cek_responsi);exit;
+						if($cek_sikap == null){
+							$sikap = '-';
+							$id_sikap = '';
+						}else{
+							foreach ($cek_sikap as $key) {
+								//cek responsi jika kosong maka ubah ke 0
+								$sikap = $key->sikap;
+								$id_sikap = $key->id_sikap;
+							}
+						}
 
 					  $nilai_final = ($nilai_akhir+$responsi)/2;
+					  $final =  $this->M_atr->cek_penilaian($nilai_final);
+						foreach ($final as $key => $value) {
+						 	$id_nilai = isset($value->id_nilai)? $value->id_nilai : '';
+						}
 						 //cari class dari nilai final
-						 $atr_final = $this->M_atr->cek_aturan_final($class_prem1,$class_prem2);
+						 $atr_final = $this->M_atr->cek_aturan_final($class_prem1,$class_prem2,$sikap);
 						 foreach ($atr_final as $key => $value_final) {
-						 	$id_aturan = isset($key->id_aturan)? $key->id_aturan : '';
+						 	$id_aturan = isset($value_final->id_aturan)? $value_final->id_aturan : '';
 						 }
 					 //print_r($responsi);exit;
 					//print_r($cek_hasil_akhir);exit;
@@ -545,8 +619,10 @@ class Nilai_prak extends CI_Controller {
 							'nim' => $this->input->post('nim'),
 							'id_responsi' => $id_responsi,
 							'id_prak_akhir' => $id,
+							'id_sikap' => $id_sikap,
 							'nilai_akhir' => $nilai_final,
-							'id_aturan' => $id_aturan
+							'id_aturan' => $id_aturan,
+							'id_nilai'=> $id_nilai
 						);
 						$this->M_hasil_akhir->tambah($data_nilai_akhir);
 					}
@@ -560,7 +636,8 @@ class Nilai_prak extends CI_Controller {
 							'id_hasil_akhir' => $id_akhir,
 							'id_responsi' => $id_responsi,
 							'nilai_akhir' => $nilai_final,
-							'id_aturan' => $id_aturan
+							'id_aturan' => $id_aturan,
+							'id_nilai' => $id_nilai
 						);
 						$this->M_hasil_akhir->edit($data_nilai_prak);
 					}

@@ -223,7 +223,7 @@
                                         <tr>
                                         <td><?php echo $list['nm_kelompok']; ?></td>
                                         <td><?php echo $format; ?></td>
-                                        <td><?php echo $list['jam']; ?></td>
+                                        <td><?php echo $list['jam_mulai']; ?></td>
                                         <td><?php echo $list['nama_pelajaran']; ?></td>
                                         <td><?php echo $list['nama']; ?></td>
                                         </tr>
@@ -397,7 +397,7 @@
                                         <tr>
                                         <td><?php echo $list['nm_kelompok']; ?></td>
                                         <td><?php echo $format; ?></td>
-                                        <td><?php echo $list['jam']; ?></td>
+                                        <td><?php echo $list['jam_mulai']; ?></td>
                                         <td><?php echo $list['nama_pelajaran']; ?></td>
                                         <td><?php echo $list['nama']; ?></td>
                                         </tr>

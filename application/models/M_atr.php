@@ -58,11 +58,22 @@ class M_atr extends CI_Model {
     	return $query->result();
 	}
 
-	public function cek_aturan_final($class_prem1,$class_prem2) 
+	public function cek_penilaian($nilai_final) 
 	{
+   		$this->db->select('*');
+      	$this->db->where('nilai_angka_bawah <=', $nilai_final);
+		$this->db->where('nilai_angka_atas >=', $nilai_final);
+      	$query = $this->db->get('tb_penilaian');
+    	return $query->result();
+	}
+
+	public function cek_aturan_final($class_prem1,$class_prem2,$sikap) 
+	{
+		//print_r($class_prem1);print_r($class_prem2);print_r($sikap);exit;
    		$this->db->select('*');
       	$this->db->where('permis1', $class_prem1);
 		$this->db->where('permis2', $class_prem2);
+		$this->db->where('permis3', $sikap);
       	$query = $this->db->get('tb_aturan');
     	return $query->result();
 	}

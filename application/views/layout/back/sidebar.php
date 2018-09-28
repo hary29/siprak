@@ -211,6 +211,14 @@ if($level==1){?>
                     <li class="nav-small-cap m-t-10">--- Main Menu</li>
                     <li> <a href="<?php echo base_url() ?>back/home_back" class="waves-effect"><i class="ti-dashboard p-r-10"></i> <span class="hide-menu">Dashboard</span></a>
                     </li>
+					
+					<li> <a href="javascript:void(0);" class="waves-effect"><i class=" ti-shopping-cart-full p-r-10"></i> <span class="hide-menu">Data Sikap<span class="fa arrow"></span></span></a>
+                        <ul class="nav nav-second-level">
+                            <li> <a href="<?php echo base_url() ?>back/Sikap">Semua Nilai Sikap</a></li>
+                            <li> <a href="<?php echo base_url() ?>back/Sikap/tambah">Tambah Nilai Sikap</a></li>
+                            <!-- <li> <a href="sales-report.html">Sales Report</a></li> -->
+                        </ul>
+                    </li>
 
                     <li> <a href="javascript:void(0);" class="waves-effect"><i class="ti-calendar p-r-10"></i> <span class="hide-menu"> Aturan <span class="fa arrow"></span></span></a>
                         <ul class="nav nav-second-level">

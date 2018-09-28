@@ -39,7 +39,7 @@
 																					<?php 
 														
 													foreach($jadwal as $list) { 
-														$format = date('d-m-Y', strtotime($list['tgl'] ));?>
+														$format = date('d-m-Y', strtotime($list['tgl']));?>
 													<tr>
 														<td><?php echo $format; ?></td>
 														<td><?php echo $list['jam_mulai']; ?></td>

@@ -2,12 +2,12 @@
 						<div class="container-fluid">
 								<div class="row bg-title">
 										<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-												<h4 class="page-title">Data Nilai Praktikum</h4> </div>
+												<h4 class="page-title">Data Nilai Akhir</h4> </div>
 										<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12"> <a href="" class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Refresh</a>
 												<ol class="breadcrumb">
-														<li><a href="<?php echo base_url() ?>front/Log/logout">Hospital</a></li>
-														<li><a href="<?php echo base_url() ?>back/nilai_prak/semua_nilai_prak">Nilai Praktikum</a></li>
-														<li class="active">Data Nilai Praktikum</li>
+														<!-- <li><a href="<?php //echo base_url() ?>front/Log/logout">Hospital</a></li> -->
+														<li><a href="<?php echo base_url() ?>back/nilai_prak/semua_nilai_prak">Nilai</a></li>
+														<li class="active">Data Nilai Akhir</li>
 												</ol>
 										</div>
 										<!-- /.col-lg-12 -->
@@ -32,7 +32,9 @@
 																					<th >Nama Experimen</th>
 																					<th >Nilai Responsi</th>
 																					<th >Nilai Praktikum</th>
+																					<th >Sikap</th>
 																					<th >nilai Akhir</th>
+																					<th >Nilai Predikat</th>
 																					<th >Hasil</th>
 																					<th >Nama</th>
 																					
@@ -42,7 +44,7 @@
 																				<tr class="odd gradeX">
 																					<?php 
 														$no = $offset;
-													foreach($hasil as $list) { ?>
+													foreach($hasil as $list) { //print_r($hasil);exit; ?>
 													<tr>
 														<td><?php echo ++$no ?></td>
 														<td><?php echo $list['nim']; ?></td>
@@ -50,7 +52,9 @@
 														<td><?php echo $list['nama_pelajaran']; ?></td>
 														<td><?php echo $list['nilai_responsi']; ?></td>
 														<td><?php echo $list['nilai']; ?></td>
+														<td><?php echo $list['sikap']; ?></td>
 														<td><?php echo $list['nilai_akhir']; ?></td>
+														<td><?php echo $list['nilai_huruf']; ?></td>
 														<td><?php echo $list['hasil']; ?></td>
 														<td><?php echo $list['nama']; ?></td>
 														<?php } ?>
